@@ -108,7 +108,7 @@ ggsave('../figures/ETFixRateImg.pdf', width = 7, height = 5, units = c("in"))
 
 kresultET = kruskal.test(ETFixRateLong$fixationRate~ETFixRateLong$whichTrials)
 
-diffBetwenSilverAndMasterET = wilcox.test(ETFixRateLong$fixationRate[ETFixRateLong$whichTrials == "fixRateFirst2"],ETFixRateLong$whichTrials[ETFixRateLong$whichTrials == "fixRateLast2"])
+diffBetwenFirstAndLastET = wilcox.test(ETFixRateLong$fixationRate[ETFixRateLong$whichTrials == "fixRateFirst2"], ETFixRateLong$fixationRate[ETFixRateLong$whichTrials == "fixRateLast2"])
 
 
 # get effect size, as per TOMCZAK & TOMCZAK (2014) http://www.tss.awf.poznan.pl/files/3_Trends_Vol21_2014__no1_20.pdf
