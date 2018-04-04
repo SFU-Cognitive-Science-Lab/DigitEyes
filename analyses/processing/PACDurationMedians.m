@@ -1,19 +1,22 @@
+% This provides fixMedianNonPAC.txt and fixMedianPAC.txt for analysis, 
+% based on user input ("Fix" or "PAC" for the varargin). It calculates
+% the median fixation durations for PAC and non-PAC fixations by
+% league and player. 
+
 function PACDurationMedians(varargin)
 
-% INPUT "PAC" for Perception Action Cycle duration medians. Otherwise,
-% enter "Fix" for non-PAC fixation duration medians.
-%
-% the OUTPUT of this is a .txt file that saves to the data directory. It is
-% used for analysis in pacDurationMediansAnalysis.R, where analysis and
-% visualization occur. 
-
-% PAC/Non-Pac Duration Median Plots Across Leagues
 % Authors (Original): Adam Bignell, Michael Knie, Judi Azmand, Ruilin Z.,
-% and Neda A.
-% Created: October 6, 2016
+%                     and Neda A.
 % Refactored (New Author): Alex Volkanov (February 3, 2017)
-% Last Review: Ruilin Zhang (February 7, 2017)
-% Last Verification: Sebastian M., Ruilin Z., Neda A. (February 7, 2017)
+%
+% Date Created: October 6, 2016
+% 
+% 
+% Cognitive Science Lab, Simon Fraser University 
+% Originally Created For: DigitEyes
+%
+% Reviewed: Ruilin Zhang (February 7, 2017)
+% Verified: Sebastian M., Ruilin Z., Neda A. (February 7, 2017)
 %
 % Edited (April 5 2017) by Caitlyn to output data for stats
 % Edited (Jan 3 2018) by Caitlyn to eliminate duplicate games via
@@ -21,6 +24,13 @@ function PACDurationMedians(varargin)
 % Edited (Mar 6 2018) by Caitlyn to improve usability for public facing
 % version. [formally pacdurationmedians_new] Pulled out SQL calls, unused
 % figures, and replaced with data imports of a .csv I exported externally.
+%
+% INPUT: "PAC" for Perception Action Cycle duration medians. Otherwise,
+%         enter "Fix" for non-PAC fixation duration medians.
+%
+% OUTPUT: a .txt file that saves to the data directory. It is
+%         used for analysis in pacDurationMediansAnalysis.R, where analysis and
+%         visualization occur. 
 %
 
 isPac = strcmpi('PAC', varargin{1});
@@ -85,10 +95,8 @@ end
             
             if (isPac) % Perception Action Cycle Durations
                 gameDurations = ultraTable.FixDuration(ultraTable.PACidx == 1 & ultraTable.gameid == game);
-                %gameDurations = mysql(strcat('SELECT FixDuration FROM skilldependenceultratable_final WHERE FirstAction IS NOT NULL AND gameid = ', gameStr));
             else       % Fixation Durations
                 gameDurations = ultraTable.FixDuration(ultraTable.PACidx == 0 & ultraTable.gameid == game);
-                %gameDurations = mysql(strcat('SELECT FixDuration FROM skilldependenceultratable_final WHERE PACidx = 0 AND gameid = ', gameStr));
             end
             
             % append to existing data
