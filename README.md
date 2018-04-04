@@ -17,29 +17,26 @@ Typically, a fixation is when the eye essentially pauses to extract information 
 #### Screen Fixations
 When the player pauses their screen, but takes no action, we call it a screen fixation. 
 
-##### Finding: 
-Fixation durations decrease with skill; better players pause for less time
-##### Data:
-fixMedianNonPAC.txt
-##### Scripts & Functions:
+** Finding: ** Fixation durations decrease with skill; better players pause for less time
+** Data: ** fixMedianNonPAC.txt
+##### Scripts & Functions: #####
 - PACDurationMedians.m: pre-processing to get fixMedianNonPAC.txt 
 - pacDurationMediansAnalysis.R: analysis and visualization
 
 #### Perception Action Cycles
 When a player pauses the screen, and takes an action, it's called a Perception Action Cycle (or PAC). 
 
-##### Finding:
-PACs are longer than screen fixations, but here again, better players do them more quickly. 
-##### Data: 
-fixMedianPAC.txt
+** Finding: ** PACs are longer than screen fixations, but here again, better players do them more quickly. 
+** Data: ** fixMedianPAC.txt
 ##### Scripts & Functions:
 - PACDurationMedians.m: pre-processing to get fixMedianPAC.txt 
 - pacDurationMediansAnalysis.R: analysis and visualization
 
 ### Fixation Rate
-##### Finding:
-##### Data:
+** Finding: ** Better players fixate more often than novices. We find parallels between the eye fixation rates of participants in category learning task where later in learning, people make more eye movements per minute. 
+** Data: ** EyeTrackFixRate.csv
 ##### Scripts & Functions:
+- FixationRateAnalysis.R
 
 ### Saccade Amplitude
 ##### Finding:
