@@ -1,4 +1,9 @@
-%  [Insert a description of the script's intended function here] 
+%  In the event that data is parsed in a table/cell array as a set of
+%  strings rather than digits, as we intend, this quick function will
+%  convert a cell array of strings to a vector of numbers.
+%
+%  The function may also be a way to strip out digits from a mixed set of
+%  strings and numbers to save only the digits in vector form.
 %  
 function numOut = convertSQLStringToNum(veiledNumberArray)
 %
@@ -20,11 +25,14 @@ function numOut = convertSQLStringToNum(veiledNumberArray)
 %  
 %  Additional Comments: heavily inspired by: https://www.mathworks.com/matlabcentral/answers/43244-selecting-only-the-numbers-from-a-string-variable
 
+% use regular expression to get digits
 B = regexp(veiledNumberArray,'\d*','Match');
 for ii= 1:length(B)
   if ~isempty(B{ii})
+      % extract the "ii"th digit, save it in the output vector
       numOut(ii,1)=str2double(B{ii}(end));
   else
+      % there is no "ii"th digit. Set the output for this row to NaN.
       numOut(ii,1)=NaN;
   end 
 end
