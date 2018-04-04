@@ -1,6 +1,9 @@
 %  If the user clones or forks the whole DigitEyes directory, we'll know a
 %  local subset of the directory structure. We can rely on this to make
 %  some decisions about where to access scripts, save data/figures. 
+%
+%  This function orients the user to the right part of the directory space
+%  and loads the master and ultra tables for use in the processing scripts.
 %  
 function [masterTable, ultraTable] = processingPreparation
 %
