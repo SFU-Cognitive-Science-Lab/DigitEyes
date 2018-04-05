@@ -8,6 +8,7 @@ We analyse the data from 3307 StarCraft 2 players. In the game, players move the
 
 We have a collection of measures to capture properties of visuo-spatial information sampling in the game, and find convincing parallels between the players' screen movements and what we already know about eye movements. 
 
+If you'd like to recreate the analyses, we recommend that you clone/download the whole repository. 
 
 ## Measures reported
 
