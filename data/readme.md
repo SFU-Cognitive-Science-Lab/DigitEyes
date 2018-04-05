@@ -6,7 +6,17 @@ Some required some pre-processing that provided sensitive information about play
 
 ### master table ###
 
+The master table contains one row per player and aggregate measures about that players' performance. 
 [summary forthcoming]
+
+| gameid               | leagueidx     | in_analysis           | pacactionlatencymean       |MapRCPerMin         |
+| -------------        | ------------- |-------------          |-------------               |-------------       |
+| identify individual  | skill level   | met exclusion criteria|latency to first PAC action |minimap right clicks|
+
+| mapAtkPerMin         | mapAblPerMin      |
+| -------------        | -------------     |
+| minimap attacks      | special abilities |
+
 
 ### ultra table ###
 
