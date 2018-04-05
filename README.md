@@ -123,13 +123,19 @@ Better players use minimap attacks more often.
 mastertable.csv
 
 ##### Scripts & Functions:
+- mapAbilitiesAnalysis.R: analysis and visualization  
 
 #### Right Clicks
-##### Finding:
-##### Data:
+Players can move their units with right clicks to the minimaps. This is a more efficient way to move, albeit less precise. 
+**Finding:** Better players use right clicks to the minimap more than novices. 
+**Data:** mastertable.csv
 ##### Scripts & Functions:
+- mapAbilitiesAnalysis.R: analysis and visualization  
 
 ### Offscreen Production
-##### Finding:
-##### Data:
+Other way to efficiently leverage the play environment is to produce units in buildings without actually fixating that building. When players train units without looking, we call it Offscreen Production. 
+
+**Finding:** Better players produce more without looking at the production site than novices. 
+**Data:** onOffProduction.csv
 ##### Scripts & Functions:
+- offScreenProduction.R
