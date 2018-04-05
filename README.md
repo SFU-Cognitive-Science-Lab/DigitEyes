@@ -86,19 +86,41 @@ NVC.csv
 NVCAnalysis.R: visualization and analysis
 
 ### Hotkey Use
-##### Finding:
-##### Data:
+There are multiple ways to select a unit/building to use it. Usually the most efficient way to select something is to set it to a hotkey/shortcut so rather than having to search for the target, it is automatically selected using the interface. 
+
+**Finding:** 
+Better players are more likely to select a unit using a hotkey.
+
+**Data:** 
+hkVSSel.csv
+
 ##### Scripts & Functions:
+- mapAbilitiesAnalysis.R: analysis and visualization  
 
 ### Minimap Use
+Another way to use the interface efficiently is to use the mini-map (a preview space) to gather information and take actions instead of using the more detailed, but slower, screen map move. We have three different measures that capture the role that using the mini map has in making efficient use of the interface. 
+
 #### Special Abilities
-##### Finding:
-##### Data:
+Some units are afforded special abilities to impact the play environment or cast spells on opponents. They can be enacted by using the minimap. 
+
+**Finding:**
+There is no apparent difference between skill levels in players' use of special abilities by minimap. 
+
+**Data:**
+mastertable.csv
+
 ##### Scripts & Functions:
+- mapAbilitiesAnalysis.R: analysis and visualization  
 
 #### Attacks
-##### Finding:
+Players can direct their units to attack using the minimap. 
+
+**Finding:**
+Better players use minimap attacks more often. 
+
 ##### Data:
+mastertable.csv
+
 ##### Scripts & Functions:
 
 #### Right Clicks
