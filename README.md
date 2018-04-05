@@ -45,24 +45,45 @@ When a player pauses the screen, and takes an action, it's called a Perception A
 - FixationRateAnalysis.R
 
 ### Saccade Amplitude
-##### Finding:
-##### Data:
+**Finding:** With experience, better players' fixations are further apart than novices. 
+
+**Data:** saccadeAmplitude.csv
+
 ##### Scripts & Functions:
+- saccadeAmplitude.R: analysis and visualization
 
 ### First Action Latency
-##### Finding:
-##### Data:
+In a PAC, players can make one or more actions. The time it takes them to make the first action is the First Action Latency.
+
+**Finding:** Better players make their first action more quickly than novices. 
+
+**Data:** masterTable.csv
 ##### Scripts & Functions:
+- FALAnalysis.R
 
 ### Between Action Latency
-##### Finding:
-##### Data:
+In a PAC, players can make one or more actions. In PACs with >1 action, we calculate the Between Action Latency, the average time it takes to take an action after the first action.
+
+**Finding:**
+Better players perform actions more quickly than novices. Their average duration difference between actions is lower as skill improves. 
+
+**Data:**
+ultraTable.csv
+
 ##### Scripts & Functions:
+- betweenActionLatencyAnalysis.R
 
 ### New View Cost
-##### Finding:
-##### Data:
+In a PAC, players can make one or more actions. In PACs with >1 we can compare the latency of the first action versus the latency of the remanining actions to discern whether moving a new part of the environment impacts how quickly a player can act. The New View Cost is a measure that subtracts the Between Action Latency from the First Action Latency.
+
+**Finding:** 
+Better players have less new view cost that novices. The difference between group is not noticable until relatively late, which is an interesting departure from most learning curves where most change occurs early in skill development and diminishing returns are observed thereafter. 
+
+**Data:** 
+NVC.csv
+
 ##### Scripts & Functions:
+NVCAnalysis.R: visualization and analysis
 
 ### Hotkey Use
 ##### Finding:
