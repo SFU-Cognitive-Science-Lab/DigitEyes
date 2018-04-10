@@ -23,13 +23,16 @@ require('ez')
 require('ggplot2')
 
 # move to this directory, and use it as a reference point to find the data folder
+
 this.dir <- dirname(parent.frame(2)$ofile)
 setwd(this.dir)
 
 setwd('../data/') # move up and into data folder
 
 MasterTable = read.table('masterTable.csv', header = TRUE, sep = ",")
+
 # hotkey vs. select
+
 HKVsSel = read.table('hkVSSel.csv', header = TRUE, sep = ",")
 
 CompleteMasterTable = MasterTable[complete.cases(MasterTable$MapRCPerMin),]
@@ -42,9 +45,9 @@ CompleteMasterTable = cbind(CompleteMasterTable, subRec)
 CompleteMasterTable$LeagueIdx = factor(CompleteMasterTable$leagueidx)
 CompleteMasterTable$subRec = factor(CompleteMasterTable$subRec)
 
-### for poster- redux of boxplots (by Caitlyn)
 
 # map right clicks
+
 quartz()
 
 mapRCImg = ggplot(CompleteMasterTable[!(CompleteMasterTable$LeagueIdx == 0),], aes(LeagueIdx,MapRCPerMin))
@@ -87,6 +90,7 @@ mapAbilImg = mapAbilImg + ggtitle("Mini-Map Ability Actions")
 ggsave('../figures/mapAbility.pdf', width = 7, height = 5, units = c("in"))
 
 # hot key vs select
+
 quartz()
 
 HKVsSel$leagueRec <- as.factor(HKVsSel$leagueRec)
@@ -102,14 +106,14 @@ hkRatioImg = hkRatioImg + ggtitle("Hot Key:Select Action Types by League")
 ggsave('../figures/hkToSelect.pdf', width = 7, height = 5.5, units = c("in")) # making this a little taller for the title to fit
 
 # run non-parametric alternative to one-way ANOVA to see if there's a difference between groups
+
 MapRCResult=kruskal.test(CompleteMasterTable$MapRCPerMin~CompleteMasterTable$LeagueIdx)
 MapAtkResult=kruskal.test(CompleteMasterTable$MapAtkPerMin~CompleteMasterTable$LeagueIdx)
 MapAblResult=kruskal.test(CompleteMasterTable$MapAblPerMin~CompleteMasterTable$LeagueIdx)
 HKVsSelResult=kruskal.test(HKVsSel$ratioRec~HKVsSel$leagueRec)
 
-#REVIEWER COMMENT: Checked assumptions, and all assumptions are met for kruskal wallis test except we do not have equality of variances. -kf & nh
-
 # get effect size, as per TOMCZAK & TOMCZAK (2014) http://www.tss.awf.poznan.pl/files/3_Trends_Vol21_2014__no1_20.pdf
+
 HRC = MapRCResult$statistic # minimap right clicks
 kRC = MapRCResult$parameter + 1
 nRC = length(unique(CompleteMasterTable$gameid));
@@ -132,6 +136,7 @@ etaSqHKSel = (HHKSel - kHKSel + 1)/(nHKSel-kHKSel)
 
 
 # 2b. Determine the difference between the "novice-ish" and the "expert-ish" toward the opposite end of the possible league
+
 silverAndMasterRC = wilcox.test(CompleteMasterTable$MapRCPerMin[CompleteMasterTable$LeagueIdx == 2],CompleteMasterTable$MapRCPerMin[CompleteMasterTable$LeagueIdx == 6])
 
 silverAndMasterAtk = wilcox.test(CompleteMasterTable$MapAtkPerMin[CompleteMasterTable$LeagueIdx == 2],CompleteMasterTable$MapAtkPerMin[CompleteMasterTable$LeagueIdx == 6])
@@ -140,7 +145,7 @@ silverAndMasterAbl = wilcox.test(CompleteMasterTable$MapAblPerMin[CompleteMaster
 
 silverAndMasterHKvS = wilcox.test(HKVsSel$ratioRec[HKVsSel$leagueRec == 2],HKVsSel$ratioRec[HKVsSel$leagueRec == 6])
 
-# 3. mark's idea to look at bronze vs. subsequent leagues; based on pairwise test from NVCAnalysis.R. Helpful for more typical learning curve distributions too.
+# 3. Look at bronze vs. subsequent leagues; helpful for more typical learning curve distributions too.
 
 effectSizeTTest <- function(measuredVariable,leagueVariable) {
     bronzeVsLater = data.frame()
