@@ -11,7 +11,7 @@ The master table contains one row per player and aggregate measures about that p
 
 | gameid               | leagueidx     | in_analysis           | pacactionlatencymean       |MapRCPerMin         |
 | -------------        | ------------- |-------------          |-------------               |-------------       |
-| identify individual  | skill level   | met exclusion criteria|latency to first PAC action |minimap right clicks|
+| identify individual  | skill level   | met inclusion criteria|latency to first PAC action |minimap right clicks|
 
 | mapAtkPerMin         | mapAblPerMin      |
 | -------------        | -------------     |
@@ -19,5 +19,15 @@ The master table contains one row per player and aggregate measures about that p
 
 
 ### ultra table ###
+
+
+|leagueidx    |gameid             |PACidx                       |in_analysis          |
+|---------    |---------          |---------                    |---------            |
+|skill level  |identify individual|the order of PAC instances   |met inclusion critera|
+
+
+|FixDuration             |betweenactionlatency   |FixX                               |FixY                               |
+|---------               |---------              |---------                          |---------                          |
+|length of PAC/fixaiton  |latency between actions|Centroid of fixation, X dimension  |Centroid of fixation, Y dimension  |
 
 [summary forthcoming]
