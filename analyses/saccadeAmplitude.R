@@ -67,7 +67,7 @@ fixDistImg = fixDistImg + labs(x = "League")
 fixDistImg = fixDistImg + labs(y = "Normalized Distance") + scale_y_continuous(limits = c(0, 1))
 fixDistImg = fixDistImg + ggtitle('Distance Between Fixations by League')
 
-setwd('../figures/') # move up and into figures folder
+setwd('../figures/') # Set directory to "figures" folder
 
 ggsave('fixDistImg.pdf', width = 7, height = 5, units = c("in"))
 
@@ -80,7 +80,7 @@ k = kresult$parameter +1
 n = length(unique(noNaNScouts$gameIDRecord));
 etaSq = (H - k + 1)/(n-k)
 
-# 2b. Determine the difference between the "novice-ish" and the "expert-ish" toward the opposite end of the possible league
+# 2b. Run Wilcox test to explore differences between the "Silver" and the "Master" groups which lie towards the opposite end of the possible league spectrum
 diffBetwenSilverAndMaster = wilcox.test(noNaNScouts$Scouts[noNaNScouts$AllLeagueRec_Scouts == 2],noNaNScouts$Scouts[noNaNScouts$AllLeagueRec_Scouts == 6])
 
 # 3. Looks at differences between the bronze league games and each subsequent league. Helpful for visualizing more typical learning curves.
