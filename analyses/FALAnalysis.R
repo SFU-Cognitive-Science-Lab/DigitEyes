@@ -3,7 +3,7 @@
   Last Edit: 5 April 2017
   
   Cognitive Science Lab, Simon Fraser University 
-  Originally Created For: [StarTrak] 
+  Originally Created For: [DigitEyes] 
   
   Reviewed: [Ximin & Joe] 
   Verified: [Alex & Neda] Nov.15/17
@@ -14,13 +14,14 @@
   "
  
  # This is a good reference for implementing high level ANOVA ideas in R code:
- # http://www.unh.edu/halelab/BIOL933/labs/lab5.pdf The comments throughout apply to our analysis with StarTrak project.
+ # http://www.unh.edu/halelab/BIOL933/labs/lab5.pdf The comments that follow apply
+ # mostly to our analysis with the DigitEyes project.
  
 require('ez')
 require('lsr')
 library('ggplot2')
 
-# Move to this directory, and use it as a reference point for finding the data folder.
+# Move to this directory, & use it as a reference point for finding the data folder.
 this.dir <- dirname(parent.frame(2)$ofile)
 
 setwd(this.dir)
@@ -59,7 +60,7 @@ rt_anova = ezANOVA(
 # 1a. Runs normality test.
 stFAL = shapiro.test(residuals(rt_anova$aov))
 
-# 1b. If normality test fails; then drop grandmaster and repeat analysis with only sufficiently large groups, as follows in 1c.
+# 1b. If normality test fails; then drop grandmaster & repeat analysis with only sufficiently large groups, as follows in 1c.
 league7Idx = noNaNFAL$AllLeagueRec_FAL == 7
 noGMFAL = noNaNFAL[!league7Idx,]
 
@@ -91,10 +92,10 @@ setwd('../figures/')
 
 ggsave("FALImg.pdf", width = 7, height = 5, units = c("in"))
 
-# 2a. If using noGMScoutingTestLog the script still fails Levene's test; ANOVA is not viable here.
+# 2a. If using noGMScoutingTestLog & the script still fails Levene's test; then ANOVA is not viable in this instance.
 diffBetwenSilverAndMaster = wilcox.test(noNaNFAL$FAL[noNaNFAL$AllLeagueRec_FAL == 2],noNaNFAL$FAL[noNaNFAL$AllLeagueRec_FAL == 6])
 
-# 2b. Then go with Kruskal-Wallis for easier comparision between measures in StarTrak and to be safe with parametric test assumptions. So run a non-parametric Kruskal Wallis test.
+# 2b. If so, then go with Kruskal-Wallis for easier comparision between measures in StarTrak & to be safe with parametric test assumptions. So run a non-parametric Kruskal Wallis test.
 kresult=kruskal.test(noNaNFAL$FAL~noNaNFAL$AllLeagueRec_FAL)
 
 # Now get effect size, as per TOMCZAK & TOMCZAK (2014) http://www.tss.awf.poznan.pl/files/3_Trends_Vol21_2014__no1_20.pdf
@@ -103,10 +104,10 @@ k = kresult$parameter + 1
 n = length(unique(noNaNFAL$subrec));
 etaSq = (H - k + 1)/(n-k)
 
-# 3a. Determine the difference between the opposite ends of the possible leagues.
+# 2c. Determine the difference between the opposite ends of the possible leagues.
 diffBetwenSilverAndMaster = wilcox.test(noNaNFAL$FAL[noNaNFAL$AllLeagueRec_FAL == 2],noNaNFAL$FAL[noNaNFAL$AllLeagueRec_FAL == 6])
 
-# 3b. Our idea to look at bronze vs. subsequent leagues; based on a pairwise test from NVCAnalysis.R was helpful for more typical learning curve distributions.
+# 2d. Our idea to look at bronze vs. subsequent leagues; based on a pairwise test from NVCAnalysis.R was helpful for more typical learning curve distributions.
 # For example we use a family-wise error correction of .05/6 = 0.008 to reject the null hypothesis, being that the two samples are drawn from the same population.
 bronzeVsLater = data.frame()
 for (leagueNum in 2:7)
