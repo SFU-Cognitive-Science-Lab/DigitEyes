@@ -56,7 +56,7 @@ rt_anova = ezANOVA(
   , return_aov = T
 )
 
-# 1 . Normality test.
+# 1a. Runs normality test.
 stFAL = shapiro.test(residuals(rt_anova$aov))
 
 # 1b. If normality test fails; then drop grandmaster and repeat analysis with only sufficiently large groups, as follows in 1c.
@@ -73,13 +73,10 @@ FALTest = ezANOVA(
   , return_aov = T
 )
 
-
 # Creates histogram of residuals.
 hist(residuals(FALTest$aov))
 
-
 quartz()
-
 
 FALImg = ggplot(noNaNFAL, aes(AllLeagueRec_FAL,FAL))
 FALImg = FALImg + geom_jitter(height = 0, width = 0.2, alpha = .1)
@@ -124,7 +121,3 @@ for (leagueNum in 2:7)
     # Effect size calculated here.
     bronzeVsLater[leagueNum-1,4] = cohensD(noNaNFAL$FAL[noNaNFAL$AllLeagueRec_FAL == 1],noNaNFAL$FAL[noNaNFAL$AllLeagueRec_FAL == leagueNum])
 }
-
-
-
-
