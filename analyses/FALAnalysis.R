@@ -12,11 +12,10 @@
   
   OUTPUT: 
   "
+ 
  # This is a good reference for implementing high level ANOVA ideas in R code:
  # http://www.unh.edu/halelab/BIOL933/labs/lab5.pdf The comments throughout apply to our analysis with StarTrak project.
  
-
-
 require('ez')
 require('lsr')
 library('ggplot2')
