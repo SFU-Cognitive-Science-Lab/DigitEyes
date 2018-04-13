@@ -12,26 +12,22 @@
   
   OUTPUT: 
   
-  a good reference for implementing high level ANOVA ideas in R code
- http://www.unh.edu/halelab/BIOL933/labs/lab5.pdf
+ This is a good reference for implementing high level ANOVA ideas in R code:
+ http://www.unh.edu/halelab/BIOL933/labs/lab5.pdf The comments throughout apply to our analysis with StarTrak project.
  
-  Additional Comments: 
-         Changelog 
-            
-            Nov 4 2017 - added in effect size, for loop; edited figures for greyscale production C.M.
-            Jan 8 2017 - removed duplicate games C.M.
-            Mar 7 2017 - removed SQL calls in preparation to share 
-"
+
 
 require('ez')
 require('lsr')
 library('ggplot2')
 
-# move to this directory, and use it as a reference point to find the data folder
+# Move to this directory, and use it as a reference point for finding the data folder.
 this.dir <- dirname(parent.frame(2)$ofile)
+
 setwd(this.dir)
 
-setwd('../data/') # move up and into data folder
+# Move up and into data folder.
+setwd('../data/') 
 
 masterTable = read.table('masterTable.csv', header = TRUE, sep = ",")
  
@@ -43,14 +39,15 @@ FALTable = cbind(AllLeagueRec_FAL, FAL, subrec)
 
 FALTable = as.data.frame(FALTable)
 
-noNaNFAL = FALTable[complete.cases(FALTable$FAL),] # eliminate missing values from first action latency
+# Eliminate missing values from first action latency.
+noNaNFAL = FALTable[complete.cases(FALTable$FAL),] 
 
 noNaNFAL = noNaNFAL[is.finite(FALTable$FAL),] 
 
 noNaNFAL$AllLeagueRec_FAL = factor(noNaNFAL$AllLeagueRec_FAL)
           noNaNFAL$subrec = factor(noNaNFAL$subrec) 
 
-# run the anova to prep for looking into assumptions
+# Runs the anova to prep test assumptions.
 rt_anova = ezANOVA(
   noNaNFAL
   , dv = FAL
@@ -60,15 +57,14 @@ rt_anova = ezANOVA(
   , return_aov = T
 )
 
-# 1 . normality test
+# 1 . Normality test.
 stFAL = shapiro.test(residuals(rt_anova$aov))
 
-# 1b. normality fails; drop grandmaster and repeat analysis with only sufficiently large groups
+# 1b. If normality test fails; then drop grandmaster and repeat analysis with only sufficiently large groups, as follows in 1c.
 league7Idx = noNaNFAL$AllLeagueRec_FAL == 7
-
 noGMFAL = noNaNFAL[!league7Idx,]
 
-# 1c. run ANOVA without small group (grandmaster)
+# 1c. Runs ANOVA without small sample group. In our case grandmaster.
 FALTest = ezANOVA(
   noGMFAL
   , dv = FAL
@@ -79,7 +75,7 @@ FALTest = ezANOVA(
 )
 
 
-# look at histogram of residuals
+# Creates histogram of residuals.
 hist(residuals(FALTest$aov))
 
 
@@ -94,38 +90,39 @@ FALImg = FALImg + labs(x = "League")
 FALImg = FALImg + labs(y = "First Action Latency (ms)")
 FALImg = FALImg + ggtitle('First Action Latency by League')
 
-setwd('../figures/') # move up and into figures folder
+# Move up and into figures folder.
+setwd('../figures/')
 
 ggsave("FALImg.pdf", width = 7, height = 5, units = c("in"))
 
-# noGMScoutingTestLog still fails Levene's test; ANOVA is not viable
+# 2a. If using noGMScoutingTestLog the script still fails Levene's test; ANOVA is not viable here.
 diffBetwenSilverAndMaster = wilcox.test(noNaNFAL$FAL[noNaNFAL$AllLeagueRec_FAL == 2],noNaNFAL$FAL[noNaNFAL$AllLeagueRec_FAL == 6])
 
-# 2 Go with Kruskal-Wallis for easier comparision between measures in StarTrak and to be safer about parametric test assumptions. Run a non-parametric Kruskal Wallis test
+# 2b. Then go with Kruskal-Wallis for easier comparision between measures in StarTrak and to be safe with parametric test assumptions. So run a non-parametric Kruskal Wallis test.
 kresult=kruskal.test(noNaNFAL$FAL~noNaNFAL$AllLeagueRec_FAL)
 
-# get effect size, as per TOMCZAK & TOMCZAK (2014) http://www.tss.awf.poznan.pl/files/3_Trends_Vol21_2014__no1_20.pdf
+# Now get effect size, as per TOMCZAK & TOMCZAK (2014) http://www.tss.awf.poznan.pl/files/3_Trends_Vol21_2014__no1_20.pdf
 H = kresult$statistic
 k = kresult$parameter + 1
 n = length(unique(noNaNFAL$subrec));
 etaSq = (H - k + 1)/(n-k)
 
-# 2b. Determine the difference between the "novice-ish" and the "expert-ish" toward the opposite end of the possible league
+# 3a. Determine the difference between the opposite ends of the possible leagues.
 diffBetwenSilverAndMaster = wilcox.test(noNaNFAL$FAL[noNaNFAL$AllLeagueRec_FAL == 2],noNaNFAL$FAL[noNaNFAL$AllLeagueRec_FAL == 6])
 
-# 3. mark's idea to look at bronze vs. subsequent leagues; based on pairwise test from NVCAnalysis.R. Helpful for more typical learning curve distributions too.
-# note: we use a family-wise error correction of .05/6 = 0.008 to reject the null hypothesis that the two samples are drawn from the same population.
+# 3b. Our idea to look at bronze vs. subsequent leagues; based on a pairwise test from NVCAnalysis.R was helpful for more typical learning curve distributions.
+# For example we use a family-wise error correction of .05/6 = 0.008 to reject the null hypothesis, being that the two samples are drawn from the same population.
 bronzeVsLater = data.frame()
 for (leagueNum in 2:7)
   {
-    # t-test
+    # T-test calculated here.
     pairCompare = t.test(noNaNFAL$FAL[noNaNFAL$AllLeagueRec_FAL == 1],noNaNFAL$FAL[noNaNFAL$AllLeagueRec_FAL == leagueNum])
     
     bronzeVsLater[leagueNum-1,1]=pairCompare$statistic
     bronzeVsLater[leagueNum-1,2]=pairCompare$parameter
     bronzeVsLater[leagueNum-1,3]=pairCompare$p.value
     
-    # effect size
+    # Effect size calculated here.
     bronzeVsLater[leagueNum-1,4] = cohensD(noNaNFAL$FAL[noNaNFAL$AllLeagueRec_FAL == 1],noNaNFAL$FAL[noNaNFAL$AllLeagueRec_FAL == leagueNum])
 }
 
