@@ -34,7 +34,6 @@ noNaN_NVC = NVC_Values[complete.cases(NVC_Values$NVC),]
 
 noNaN_NVC = NVC_Values[is.finite(noNaN_NVC$NVC),]
 
-# noNaN_NVC$NVC = factor(noNaN_NVC$NVC)
 noNaN_NVC$AllLeagueRec_NVC = factor(noNaN_NVC$AllLeagueRec_NVC)
 
 # Add in a column specifying within groups identifier
@@ -51,7 +50,6 @@ rt_anova = ezANOVA(
   , type = 3
   , return_aov = T
 )
-#REVIEWER COMMENT: OBVIOUSLY ANOVA ASSUMPTIONS ARE VIOLATED, REVIEWED FOR LOGIC, AND DIDN'T FOCUS ON ERROR. 
 
 # 1 . normality test
 shapiro.test(residuals(rt_anova$aov))
@@ -104,7 +102,7 @@ etaSq = (H - k + 1)/(n-k)
 # 2b. Determine the difference between the "novice-ish" and the "expert-ish" toward the opposite end of the possible league
 diffBetwenSilverAndMaster = wilcox.test(noNaN_NVC$NVC[noNaN_NVC$AllLeagueRec_NVC == 2],noNaN_NVC$NVC[noNaN_NVC$AllLeagueRec_NVC == 6])
 
-# 3. mark's idea to look at bronze vs. subsequent leagues; based on pairwise test from NVCAnalysis.R. Helpful for more typical learning curve distributions too.
+# 3. Mark's idea to look at bronze vs. subsequent leagues; based on pairwise test from NVCAnalysis.R. Helpful for more typical learning curve distributions too.
 # note: we use a family-wise error correction of .05/6 = 0.008 to reject the null hypothesis that the two samples are drawn from the same population.
 bronzeVsLater = data.frame()
 for (leagueNum in 2:7){
