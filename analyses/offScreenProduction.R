@@ -26,6 +26,11 @@ require('ez')
 require('ggplot2')
 require('lsr')
 
+# allows Quartz to work in windows
+if(.Platform$OS.type=="windows") { 
+  quartz<-function() windows()
+}
+
 # move to this directory, and use it as a reference point to find the data folder
 this.dir <- dirname(parent.frame(2)$ofile)
 setwd(this.dir)
@@ -56,6 +61,7 @@ offScreenProdImg = offScreenProdImg + labs(x = "League")
 offScreenProdImg = offScreenProdImg + labs(y = "Off Screen Production (%)")
 offScreenProdImg = offScreenProdImg + ggtitle("Off Screen Production by League")
 
+ggplot_build(offScreenProdImg)
 ggsave('../figures/offScreenProdImg.pdf', width = 7, height = 5, units = c("in"))
 
 # visualize to match violin plots in paper: zerg
@@ -69,6 +75,7 @@ offScreenProdImg_z = offScreenProdImg_z + labs(x = "League")
 offScreenProdImg_z = offScreenProdImg_z + labs(y = "Off Screen Production (%)")
 offScreenProdImg_z = offScreenProdImg_z + ggtitle("Zerg Off Screen Production by League")
 
+ggplot_build(offScreenProdImg_z)
 ggsave('../figures/supplementary/offScreenProdImg_z.pdf')
 
 # visualize to match violin plots in paper: terran
@@ -82,6 +89,7 @@ offScreenProdImg_t = offScreenProdImg_t  + labs(x = "League")
 offScreenProdImg_t = offScreenProdImg_t  + labs(y = "Off Screen Production (%)")
 offScreenProdImg_t = offScreenProdImg_t  + ggtitle("Terran Off Screen Production by League")
 
+ggplot_build(offScreenProdImg_t)
 ggsave('../figures/supplementary/offScreenProdImg_t.pdf')
 
 # visualize to match violin plots in paper: protoss
@@ -95,6 +103,7 @@ offScreenProdImg_p = offScreenProdImg_p + labs(x = "League")
 offScreenProdImg_p = offScreenProdImg_p + labs(y = "Off Screen Production (%)")
 offScreenProdImg_p = offScreenProdImg_p + ggtitle("Protoss Off Screen Production by League")
 
+ggplot_build(offScreenProdImg_p)
 ggsave('../figures/supplementary/offScreenProdImg_p.pdf')
 
 
