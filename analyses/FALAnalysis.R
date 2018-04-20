@@ -1,3 +1,4 @@
+
 " Author: Judi Azmand, Romanos Byliris, YuYing Mak
   Date Created: 5 April 2017 
   Last Edit: 5 April 2017
@@ -20,6 +21,11 @@
 require('ez')
 require('lsr')
 library('ggplot2')
+
+# allows Quartz to work in windows
+if(.Platform$OS.type=="windows") { 
+  quartz<-function() windows()
+}
 
 # Move to this directory, & use it as a reference point for finding the data folder.
 this.dir <- dirname(parent.frame(2)$ofile)
@@ -89,6 +95,8 @@ FALImg = FALImg + ggtitle('First Action Latency by League')
 
 # Move up and into figures folder.
 setwd('../figures/')
+
+ggplot_build(FALImg)
 
 ggsave("FALImg.pdf", width = 7, height = 5, units = c("in"))
 
