@@ -22,6 +22,11 @@ Changes
 require('ez')
 require('ggplot2')
 
+# allows Quartz to work in windows
+if(.Platform$OS.type=="windows") { 
+  quartz<-function() windows()
+}
+
 # move to this directory, and use it as a reference point to find the data folder
 
 this.dir <- dirname(parent.frame(2)$ofile)
@@ -58,6 +63,7 @@ mapRCImg = mapRCImg + labs(x = "League")
 mapRCImg = mapRCImg + labs(y = "Right Clicks per Minute")
 mapRCImg = mapRCImg + ggtitle("Mini-Map Right Clicks")
 
+ggplot_build(mapRCImg)
 ggsave('../figures/mapRC.pdf', width = 7, height = 5, units = c("in"))
 
 
@@ -73,6 +79,7 @@ mapAtkImg = mapAtkImg + labs(x = "League")
 mapAtkImg = mapAtkImg + labs(y = "Attacks Per Minute")
 mapAtkImg = mapAtkImg + ggtitle("Mini-Map Attack Actions")
 
+ggplot_build(mapAtkImg)
 ggsave('../figures/mapAtk.pdf', width = 7, height = 5, units = c("in"))
 
 # map abilities
@@ -87,6 +94,7 @@ mapAbilImg = mapAbilImg + labs(x = "League")
 mapAbilImg = mapAbilImg + labs(y = "Ability Actions Per Minute")
 mapAbilImg = mapAbilImg + ggtitle("Mini-Map Ability Actions")
 
+ggplot_build(mapAbilImg)
 ggsave('../figures/mapAbility.pdf', width = 7, height = 5, units = c("in"))
 
 # hot key vs select
@@ -103,6 +111,7 @@ hkRatioImg = hkRatioImg + labs(x = "League")
 hkRatioImg = hkRatioImg + labs(y = "Hot Keys:Select Ratio")
 hkRatioImg = hkRatioImg + ggtitle("Hot Key:Select Action Types by League")
 
+ggplot_build(hkRatioImg)
 ggsave('../figures/hkToSelect.pdf', width = 7, height = 5.5, units = c("in")) # making this a little taller for the title to fit
 
 # run non-parametric alternative to one-way ANOVA to see if there's a difference between groups
