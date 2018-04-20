@@ -20,6 +20,11 @@ require('ez')
 require('ggplot2')
 require('lsr')
 
+# allows Quartz to work in windows
+if(.Platform$OS.type=="windows") { 
+  quartz<-function() windows()
+}
+
 # Move to this directory, and use it as a reference point to find the data folder
 this.dir <- dirname(parent.frame(2)$ofile)
 setwd(this.dir)
@@ -69,6 +74,7 @@ fixDistImg = fixDistImg + ggtitle('Distance Between Fixations by League')
 
 setwd('../figures/') # Set directory to "figures" folder
 
+ggplot_build(fixDistImg)
 ggsave('fixDistImg.pdf', width = 7, height = 5, units = c("in"))
 
 # 2. Run a non-parametric Kruskal Wallis test
