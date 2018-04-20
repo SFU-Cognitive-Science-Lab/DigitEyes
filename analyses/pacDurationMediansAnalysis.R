@@ -26,6 +26,11 @@ require('lsr')
 require('ez')
 require('ggplot2')
 
+# allows Quartz to work in windows
+if(.Platform$OS.type=="windows") { 
+  quartz<-function() windows()
+}
+
 isPAC = 1
 
 # Move to this directory, and use it as a reference point to find the data folder
@@ -172,4 +177,5 @@ pacDurImg = pacDurImg + ggtitle(mainTitle)
 setwd('../figures/') # Move into figures folder
 saveAsName = paste(fileNamePlot, '.pdf', sep="")
 
+ggplot_build(pacDurImg)
 ggsave(saveAsName, width = 7, height = 5, units = c("in"))
