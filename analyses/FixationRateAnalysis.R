@@ -48,8 +48,8 @@ fixRateImg = fixRateImg + geom_jitter(height = 0, width = 0.2, alpha = .1)
 fixRateImg = fixRateImg + theme_bw() + theme(text = element_text(size=25), panel.grid.major = element_blank(), plot.title = element_text(size=25)) 
 fixRateImg = fixRateImg + geom_violin(alpha = .15, fill = "#C0C0C0", colour = "#C0C0C0")
 fixRateImg = fixRateImg + labs(x = "League")
-fixRateImg = fixRateImg + labs(y = "Fixation Rate")
-fixRateImg = fixRateImg + ggtitle('Screen Fixation Rate by League')
+fixRateImg = fixRateImg + labs(y = "PAC, Fixation Rate")
+fixRateImg = fixRateImg + ggtitle('PAC + Fixation Rate by League')
 ggsave('../figures/SCFixRateImg.pdf', width = 7, height = 5, units = c("in"))
 
 
