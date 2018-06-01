@@ -19,10 +19,7 @@ Additional Scripts Used: requires that FixationRate_BarGraphsByLeague.m was run 
 
 require('psych')
 require('reshape')
-require('vioplot')
-
-
-
+require('lsr')
 require('ez')
 require('ggplot2')
 
