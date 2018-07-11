@@ -36,7 +36,7 @@ UltraTable$leagueidx  = factor(UltraTable$leagueidx)
 
 CompleteUltraTable = UltraTable[complete.cases(UltraTable$betweenactionlatency),]
 
-meansByLeague = aggregate(as.numeric(CompleteUltraTable$betweenactionlatency), by = list(CompleteUltraTable$gameid, CompleteUltraTable$leagueidx), FUN=mean, na.rm=TRUE)
+meansByLeague = aggregate(as.numeric(as.character(CompleteUltraTable$betweenactionlatency)), by = list(CompleteUltraTable$gameid, CompleteUltraTable$leagueidx), FUN=mean, na.rm=TRUE)
 colnames(meansByLeague)=c('player', 'league', 'BAL')
 
 # Visualize
