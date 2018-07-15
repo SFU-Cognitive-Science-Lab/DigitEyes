@@ -114,14 +114,14 @@ hkRatioImg = hkRatioImg + ggtitle("Hot Key:Select Action Types by League")
 ggplot_build(hkRatioImg)
 ggsave('../figures/hkToSelect.pdf', width = 7, height = 5.5, units = c("in")) # making this a little taller for the title to fit
 
-# run non-parametric alternative to one-way ANOVA to see if there's a difference between groups
+# run non-parametric alternative to one-way ANOVA to see if there's any difference between groups
 
 MapRCResult=kruskal.test(CompleteMasterTable$MapRCPerMin~CompleteMasterTable$LeagueIdx)
 MapAtkResult=kruskal.test(CompleteMasterTable$MapAtkPerMin~CompleteMasterTable$LeagueIdx)
 MapAblResult=kruskal.test(CompleteMasterTable$MapAblPerMin~CompleteMasterTable$LeagueIdx)
 HKVsSelResult=kruskal.test(HKVsSel$ratioRec~HKVsSel$leagueRec)
 
-# get effect size, as per TOMCZAK & TOMCZAK (2014) http://www.tss.awf.poznan.pl/files/3_Trends_Vol21_2014__no1_20.pdf
+# get effect size, as per TOMCZAK & TOMCZAK (2014). Reference: http://www.tss.awf.poznan.pl/files/3_Trends_Vol21_2014__no1_20.pdf
 
 HRC = MapRCResult$statistic # minimap right clicks
 kRC = MapRCResult$parameter + 1
@@ -154,7 +154,7 @@ silverAndMasterAbl = wilcox.test(CompleteMasterTable$MapAblPerMin[CompleteMaster
 
 silverAndMasterHKvS = wilcox.test(HKVsSel$ratioRec[HKVsSel$leagueRec == 2],HKVsSel$ratioRec[HKVsSel$leagueRec == 6])
 
-# 3. Look at bronze vs. subsequent leagues; helpful for more typical learning curve distributions too.
+# 3. Look at bronze vs. subsequent leagues; helpful for more typical learning curve distributions as well.
 
 effectSizeTTest <- function(measuredVariable,leagueVariable) {
     bronzeVsLater = data.frame()
