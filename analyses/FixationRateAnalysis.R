@@ -6,7 +6,7 @@ Cognitive Science Lab, Simon Fraser University
 Originally Created For: StarTrak
 
 Reviewed: [Kat] 
-Verified: [] 
+Verified: [Yue 2018/7/26 Using gramm in Matlab to plot the same data. They look very much the same as plots produced by this R file.] 
 
 INPUT:                     
 
