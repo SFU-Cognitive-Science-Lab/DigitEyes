@@ -74,7 +74,7 @@ setwd('../figures/')
 
 ggplot_build(FALImg)
 
-ggsave("FALImg.pdf", width = 7, height = 5, units = c("in"))
+ggsave("MedianFALImg.pdf", width = 7, height = 5, units = c("in"))
 
 # 2a. If using noGMScoutingTestLog & the script still fails Levene's test; then ANOVA is not viable in this instance.
 diffBetwenSilverAndMaster = wilcox.test(noNaNFAL$FAL[noNaNFAL$AllLeagueRec_FAL == 2],noNaNFAL$FAL[noNaNFAL$AllLeagueRec_FAL == 6])
