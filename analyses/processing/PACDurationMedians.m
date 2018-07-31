@@ -99,6 +99,8 @@ end
                 gameDurations = ultraTable.FixDuration(ultraTable.PACidx == 0 & ultraTable.gameid == game);
             end
             
+            gameDurations = TimeStampToRealTime(gameDurations)*1000; % convert to milliseconds -Kat & Rollin
+            
             % append to existing data
             medians = [medians, median(gameDurations)];
         end
