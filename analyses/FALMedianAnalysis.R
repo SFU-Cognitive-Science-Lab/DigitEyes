@@ -35,12 +35,19 @@ setwd(this.dir)
 setwd('../data/') 
 
 ultraTab = read.table('ultraTable.csv', header = TRUE, sep = ",")
+# eliminate duplicates by excluding in_analysis = 0
+ultraTab = ultraTab[ultraTab$in_analysis == 1,]
 
+# prepare critical data
 FAL = (as.numeric(as.character(ultraTab$ActionLatency))/88.5347)*1000 # convert from timestamps to milliseconds
 AllLeagueRec_FAL = ultraTab$leagueidx
 subrec = ultraTab$gameid
 
 FALTable = cbind(AllLeagueRec_FAL, FAL, subrec)
+
+# the ultra table contains one row per PAC. Aggregate to get the median per player for their whole game.
+aggregated_output = aggregate(FAL ~ AllLeagueRec_FAL * subrec,
+                              data=FALTable, FUN=median)
 
 FALTable = as.data.frame(FALTable)
 
@@ -51,36 +58,6 @@ noNaNFAL = noNaNFAL[is.finite(FALTable$FAL),]
 
 noNaNFAL$AllLeagueRec_FAL = factor(noNaNFAL$AllLeagueRec_FAL)
 noNaNFAL$subrec = factor(noNaNFAL$subrec) 
-
-# Runs the anova to prep test assumptions.
-rt_anova = ezANOVA(
-  noNaNFAL
-  , dv = FAL
-  , wid = subrec
-  , between = AllLeagueRec_FAL
-  , type = 3
-  , return_aov = T
-)
-
-# 1a. Runs normality test.
-stFAL = shapiro.test(residuals(rt_anova$aov))
-
-# 1b. If normality test fails; then drop grandmaster & repeat analysis with only sufficiently large groups, as follows in 1c.
-league7Idx = noNaNFAL$AllLeagueRec_FAL == 7
-noGMFAL = noNaNFAL[!league7Idx,]
-
-# 1c. Runs ANOVA without small sample group. In our case grandmaster.
-FALTest = ezANOVA(
-  noGMFAL
-  , dv = FAL
-  , wid = subrec
-  , between = AllLeagueRec_FAL
-  , type = 3
-  , return_aov = T
-)
-
-# Creates histogram of residuals.
-hist(residuals(FALTest$aov))
 
 quartz()
 
