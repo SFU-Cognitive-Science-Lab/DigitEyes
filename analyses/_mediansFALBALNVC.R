@@ -84,19 +84,14 @@ visualAndResults <- function(mdnDataFrame, measureName) {
   Img = Img + geom_violin(alpha = .15, fill = "#C0C0C0", colour = "#C0C0C0")
   Img = Img + labs(x = "League")
   Img = Img + labs(y = measureName)
-  Img = Img + ggtitle(paste(measureName, 'First Action Latency by League', sep = ' '))
+  Img = Img + ggtitle(paste(measureName, ' by League', sep = ''))
   
-  # Move up and into figures folder.
-  setwd('../figures/')
+  print(Img)
   
-  ggplot_build(Img)
-  
-  ggsave("MedianImg.pdf", width = 7, height = 5, units = c("in"))
-  
-  diffBetwenSilverAndMaster = wilcox.test(noNaNFAL$FAL[noNaNFAL$AllLeagueRec == 2],noNaNFAL$FAL[noNaNFAL$AllLeagueRec == 6])
-  
+  dependentVar = mdnDataFrame[[measureName]]
+
   # Kruskal-Wallis for easier comparision between measures in StarTrak & to be safe with parametric test assumptions
-  kresult=kruskal.test(noNaNFAL$FAL~noNaNFAL$AllLeagueRec)
+  kresult=kruskal.test(dependentVar~mdnDataFrame$AllLeagueRec)
   
   # Now get effect size, as per TOMCZAK & TOMCZAK (2014) http://www.tss.awf.poznan.pl/files/3_Trends_Vol21_2014__no1_20.pdf
   H = kresult$statistic
@@ -105,7 +100,7 @@ visualAndResults <- function(mdnDataFrame, measureName) {
   etaSq = (H - k + 1)/(n-k)
   
   # 2c. Determine the difference between the opposite ends of the possible leagues.
-  diffBetwenSilverAndMaster = wilcox.test(noNaNFAL$FAL[noNaNFAL$AllLeagueRec == 2],noNaNFAL$FAL[noNaNFAL$AllLeagueRec == 6])
+  diffBetwenSilverAndMaster = wilcox.test(dependentVar[mdnDataFrame$AllLeagueRec == 2],dependentVar[mdnDataFrame$AllLeagueRec == 6])
   
   # 2d. Our idea to look at bronze vs. subsequent leagues; based on a pairwise test from NVCAnalysis.R was helpful for more typical learning curve distributions.
   # For example we use a family-wise error correction of .05/6 = 0.008 to reject the null hypothesis, being that the two samples are drawn from the same population.
@@ -113,17 +108,22 @@ visualAndResults <- function(mdnDataFrame, measureName) {
   for (leagueNum in 2:7)
   {
     # T-test calculated here.
-    pairCompare = t.test(noNaNFAL$FAL[noNaNFAL$AllLeagueRec == 1],noNaNFAL$FAL[noNaNFAL$AllLeagueRec == leagueNum])
+    pairCompare = t.test(dependentVar[mdnDataFrame$AllLeagueRec == 1],dependentVar[mdnDataFrame$AllLeagueRec == leagueNum])
     
     bronzeVsLater[leagueNum-1,1]=pairCompare$statistic
     bronzeVsLater[leagueNum-1,2]=pairCompare$parameter
     bronzeVsLater[leagueNum-1,3]=pairCompare$p.value
     
-    # Effect size calculated here.
-    bronzeVsLater[leagueNum-1,4] = cohensD(noNaNFAL$FAL[noNaNFAL$AllLeagueRec == 1],noNaNFAL$FAL[noNaNFAL$AllLeagueRec == leagueNum])
+    # T-test effect size 
+    bronzeVsLater[leagueNum-1,4] = cohensD(dependentVar[mdnDataFrame$AllLeagueRec == 1],dependentVar[mdnDataFrame$AllLeagueRec == leagueNum])
   }
   
-  
-  return(list(kresult, pairCompare, bronzeVsLater, diffBetwenSilverAndMaster))
+  # output
+  return(list(mdnDataFrame, kresult, pairCompare, bronzeVsLater, diffBetwenSilverAndMaster, Img))
 }
 
+
+# call function for each of the three measures (BAL, FAL, NVC)
+FALOut = visualAndResults(FALmedians, 'FAL')
+BALOut = visualAndResults(BALmedians, 'BAL')
+NVCOut = visualAndResults(NVCmedians, 'NVC')
