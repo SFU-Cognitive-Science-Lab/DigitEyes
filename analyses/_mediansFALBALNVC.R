@@ -86,6 +86,10 @@ visualAndResults <- function(mdnDataFrame, measureName) {
   Img = Img + labs(y = measureName)
   Img = Img + ggtitle(paste(measureName, ' by League', sep = ''))
   
+  
+  # save image
+  ggsave(paste('../figures/', measureName, '.pdf', sep = ""), device = pdf, width = 7, height = 5, units = c("in"))
+  
   print(Img)
   
   dependentVar = mdnDataFrame[[measureName]]
@@ -117,9 +121,6 @@ visualAndResults <- function(mdnDataFrame, measureName) {
     # T-test effect size 
     bronzeVsLater[leagueNum-1,4] = cohensD(dependentVar[mdnDataFrame$AllLeagueRec == 1],dependentVar[mdnDataFrame$AllLeagueRec == leagueNum])
   }
-  
-  # save image
-  ggsave(paste('../figures/', measureName, sep = ""), width = 7, height = 5, units = c("in"))
   
   # output
   return(list(mdnDataFrame, kresult, pairCompare, bronzeVsLater, diffBetwenSilverAndMaster, Img))
