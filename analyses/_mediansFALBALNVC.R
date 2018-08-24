@@ -120,6 +120,8 @@ visualAndResults <- function(mdnDataFrame, measureName) {
     
     # T-test effect size 
     bronzeVsLater[leagueNum-1,4] = cohensD(dependentVar[mdnDataFrame$AllLeagueRec == 1],dependentVar[mdnDataFrame$AllLeagueRec == leagueNum])
+    
+    names(bronzeVsLater) <- c('T', 'df', 'p', 'D')
   }
   
   # output
