@@ -125,7 +125,7 @@ visualAndResults <- function(mdnDataFrame, measureName) {
   }
   
   # output
-  return(list(mdnDataFrame, kresult, pairCompare, bronzeVsLater, diffBetwenSilverAndMaster, Img))
+  return(list(mdnDataFrame, kresult, etaSq, pairCompare, bronzeVsLater, diffBetwenSilverAndMaster, Img))
 }
 
 
