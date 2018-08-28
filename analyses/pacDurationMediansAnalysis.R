@@ -31,7 +31,7 @@ if(.Platform$OS.type=="windows") {
   quartz<-function() windows()
 }
 
-isPAC = 1
+isPAC = 0
 
 # Move to this directory, and use it as a reference point to find the data folder
 this.dir <- dirname(parent.frame(2)$ofile)
@@ -72,6 +72,9 @@ noNaNMediansComplete = cbind(noNaNMedians, subRec)
 
 noNaNMediansComplete$grandLeaguesOut = factor(noNaNMediansComplete$grandLeaguesOut)
 noNaNMediansComplete$subRec = factor(noNaNMediansComplete$subRec)
+
+# added to Aug 2018 to convert data to milliseconds from time stamp
+noNaNMediansComplete$grandMediansOut = noNaNMediansComplete$grandMediansOut/88.5347*1000
 
 # Run ANOVA to prepare for looking into assumptions
 rt_anova = ezANOVA(
