@@ -47,7 +47,7 @@ protoss = subset(productionTab, PlayerRace == "Protoss", select = c(LeagueNum, O
 
 # direct test of novice-expert differences per race
 diffBetwenSilverAndMaster_z = wilcox.test(zerg$OffScreenPercent[zerg$LeagueNum == 2],zerg$OffScreenPercent[zerg$LeagueNum == 6])
-ggplodiffBetwenSilverAndMaster_t = wilcox.test(terran$OffScreenPercent[terran$LeagueNum == 2],terran$OffScreenPercent[terran$LeagueNum == 6])
+diffBetwenSilverAndMaster_t = wilcox.test(terran$OffScreenPercent[terran$LeagueNum == 2],terran$OffScreenPercent[terran$LeagueNum == 6])
 diffBetwenSilverAndMaster_p = wilcox.test(protoss$OffScreenPercent[protoss$LeagueNum == 2],protoss$OffScreenPercent[protoss$LeagueNum == 6])
 
 # visualize to match violin plots in paper: overall
