@@ -35,7 +35,7 @@ UltraTable = read.table('ultraTable.csv', header = TRUE, sep = ",")
 UltraTable$leagueidx  = factor(UltraTable$leagueidx)
 
 CompleteUltraTable = UltraTable[complete.cases(UltraTable$betweenactionlatency),]
-CompleteUltraTable$betweenactionlatency = CompleteUltraTable$betweenactionlatency/88.5347*1000 # convert to ms 
+CompleteUltraTable$betweenactionlatency = as.numeric(as.character(CompleteUltraTable$betweenactionlatency))/88.5347*1000 # convert to ms 
 
 
 meansByLeague = aggregate(as.numeric(as.character(CompleteUltraTable$betweenactionlatency)), by = list(CompleteUltraTable$gameid, CompleteUltraTable$leagueidx), FUN=mean, na.rm=TRUE)
