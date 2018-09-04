@@ -67,6 +67,8 @@ etaSq = (H - k + 1)/(n-k)
 
 # 2b. Determine the difference between the "novice-ish" and the "expert-ish" toward the opposite end of the possible league
 diffBetwenSilverAndMaster = wilcox.test(SCFixRate$fixRate[SCFixRate$leagueID == 2],SCFixRate$fixRate[SCFixRate$leagueID == 6])
+effSizeR = sqrt(diffBetwenSilverAndMaster$statistic)/(length(unique(SCFixRate$gameIDRecord[SCFixRate$leagueID == 2])) + length(unique(SCFixRate$gameIDRecord[SCFixRate$league==6])))
+
 
 # 3. mark's idea to look at bronze vs. subsequent leagues; based on pairwise test from fixRateAnalysis.R. Helpful for more typical learning curve distributions too.
 # note: we use a family-wise error correction of .05/6 = 0.008 to reject the null hypothesis that the two samples are drawn from the same population.
@@ -106,7 +108,7 @@ ggsave('../figures/ETFixRateImg.pdf', width = 7, height = 5, units = c("in"))
 kresultET = kruskal.test(ETFixRateLong$fixationRate~ETFixRateLong$whichTrials)
 
 diffBetwenFirstAndLastET = wilcox.test(ETFixRateLong$fixationRate[ETFixRateLong$whichTrials == "fixRateFirst2"], ETFixRateLong$fixationRate[ETFixRateLong$whichTrials == "fixRateLast2"])
-
+effSizeR = sqrt(diffBetwenFirstAndLastET$statistic)/length(unique(ETFixRateLong$participantID))*2
 
 # get effect size, as per TOMCZAK & TOMCZAK (2014) http://www.tss.awf.poznan.pl/files/3_Trends_Vol21_2014__no1_20.pdf
 HET = kresultET$statistic
