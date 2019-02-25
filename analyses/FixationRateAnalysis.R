@@ -116,3 +116,10 @@ kET = kresultET$parameter + 1
 nET = length(unique(ETFixRateLong$participantID));
 etaSqET = (HET - kET + 1)/(nET-kET)
 
+## in response to reviewer request, a histogram of the number of observations that went into analysis.
+# reviewed: []
+# verified: []
+ggplot(data = SCFixRate) + geom_histogram(aes(x = SCFixRate$leagueID), stat="count") + labs(title = "Number of Observations in Analysis: StarCraft II Fixation Rate") + 
+  labs(x="League", y="Count")
+
+ggsave('../figures/SCFixRateHist.pdf', width = 7, height = 5, units = c("in"))
