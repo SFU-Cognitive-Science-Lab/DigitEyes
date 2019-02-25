@@ -31,7 +31,7 @@ if(.Platform$OS.type=="windows") {
   quartz<-function() windows()
 }
 
-isPAC = 0
+isPAC = 1
 
 # Move to this directory, and use it as a reference point to find the data folder
 this.dir <- dirname(parent.frame(2)$ofile)
@@ -182,3 +182,15 @@ saveAsName = paste(fileNamePlot, '.pdf', sep="")
 
 ggplot_build(pacDurImg)
 ggsave(saveAsName, width = 7, height = 5, units = c("in"))
+
+## in response to reviewer request, a histogram of the number of observations that went into analysis.
+# reviewed: []
+# verified: []
+if(isPAC == 0){
+ggplot(data = noNaNMediansComplete, aes(noNaNMediansComplete$grandLeaguesOut)) + geom_histogram(aes(x=noNaNMediansComplete$grandLeaguesOut), stat="count") + labs(title = "Number of Observations in Analysis: Fixation Duration") + 
+    labs(x="League", y="Count")
+}else{ggplot(data = noNaNMediansComplete, aes(noNaNMediansComplete$grandLeaguesOut)) + geom_histogram(aes(x=noNaNMediansComplete$grandLeaguesOut), stat="count") + labs(title = "Number of Observations in Analysis: PAC Duration")+ 
+    labs(x="League", y="Count")}
+
+histoName = paste(fileNamePlot, 'Hist.pdf', sep="")
+ggsave(histoName, width = 7, height = 5, units = c("in"))
