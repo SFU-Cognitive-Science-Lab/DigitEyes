@@ -55,6 +55,8 @@ setwd('../figures/') # Move up and into figures folder
 
 ggsave("BALImg.pdf", width = 7, height = 5, units = c("in"))
 
+
+
 # Run non-parametric alternative to one-way ANOVA to see if there's a difference between groups
 kresult=kruskal.test(meansByLeague$BAL~meansByLeague$league)
 
@@ -81,3 +83,22 @@ for (leagueNum in 2:7){
     # Effect size
     bronzeVsLater[leagueNum-1,4] = cohensD(meansByLeague$BAL[meansByLeague$league == 1],meansByLeague$BAL[meansByLeague$league == leagueNum])
 }
+
+## in response to reviewer request, a histogram of the number of observations that went into analysis.
+# reviewed: []
+# verified: []
+ggplot(data = meansByLeague) + geom_histogram(aes(x = meansByLeague$league), stat="count") + labs(title = "Number of Observations in Analysis: BAL") + 
+  labs(x="League", y="Count")
+
+ggsave('../figures/BALHist.pdf', width = 7, height = 5, units = c("in"))
+
+# number of observations in the raw data 
+CompleteUltraTableNoBALNaN = CompleteUltraTable[!is.na(CompleteUltraTable$betweenactionlatency),]
+
+ggplot(data = CompleteUltraTableNoBALNaN) + geom_histogram(aes(x = CompleteUltraTableNoBALNaN$leagueidx), stat="count") + labs(title = "Number of Observations in Dataset: BAL") + 
+  labs(x="League", y="Count")
+# league seven has 12462 observations 
+# >summary(CompleteUltraTableNoBALNaN)
+
+ggsave('../figures/BALRawHist.pdf', width = 7, height = 5, units = c("in"))
+
