@@ -104,3 +104,11 @@ for (leagueNum in 2:7){
     bronzeVsLater[leagueNum-1,4] = cohensD(noNaNScouts$Scouts[noNaNScouts$AllLeagueRec_Scouts == 1],noNaNScouts$Scouts[noNaNScouts$AllLeagueRec_Scouts == leagueNum])
 }
 
+
+## in response to reviewer request, a histogram of the number of observations that went into analysis.
+# reviewed: []
+# verified: []
+ggplot(data = noNaNScouts) + geom_histogram(aes(x = noNaNScouts$AllLeagueRec_Scouts), stat="count") + labs(title = "Number of Observations in Analysis: Saccade amplitude") + 
+  labs(x="League", y="Count")
+
+ggsave('../figures/saccadeAmplitudeHist.pdf', width = 7, height = 5, units = c("in"))
