@@ -66,6 +66,13 @@ mapRCImg = mapRCImg + ggtitle("Mini-Map Right Clicks")
 ggplot_build(mapRCImg)
 ggsave('../figures/mapRC.pdf', width = 7, height = 5, units = c("in"))
 
+## in response to reviewer request, a histogram of the number of observations that went into analysis.
+# reviewed: []
+# verified: []
+ggplot(data = CompleteMasterTable[!(CompleteMasterTable$LeagueIdx == 0),]) + geom_histogram(aes(x = CompleteMasterTable$LeagueIdx), stat="count") + labs(title = "Number of Observations in Analysis: Map Right Clicks Per Minute") + 
+  labs(x="League", y="Count")
+
+ggsave('../figures/MapAttacksHist.pdf', width = 7, height = 5, units = c("in"))
 
 # map attacks
 
@@ -82,6 +89,14 @@ mapAtkImg = mapAtkImg + ggtitle("Mini-Map Attack Actions")
 ggplot_build(mapAtkImg)
 ggsave('../figures/mapAtk.pdf', width = 7, height = 5, units = c("in"))
 
+## in response to reviewer request, a histogram of the number of observations that went into analysis.
+# reviewed: []
+# verified: []
+ggplot(data = CompleteMasterTable[!(CompleteMasterTable$LeagueIdx == 0),]) + geom_histogram(aes(x = CompleteMasterTable$LeagueIdx), stat="count") + labs(title = "Number of Observations in Analysis: Map Attacks Per Minute") + 
+  labs(x="League", y="Count")
+
+ggsave('../figures/MapAttacksHist.pdf', width = 7, height = 5, units = c("in"))
+
 # map abilities
 
 quartz()
@@ -96,6 +111,14 @@ mapAbilImg = mapAbilImg + ggtitle("Mini-Map Ability Actions")
 
 ggplot_build(mapAbilImg)
 ggsave('../figures/mapAbility.pdf', width = 7, height = 5, units = c("in"))
+
+## in response to reviewer request, a histogram of the number of observations that went into analysis.
+# reviewed: []
+# verified: []
+ggplot(data = CompleteMasterTable[!(CompleteMasterTable$LeagueIdx == 0),]) + geom_histogram(aes(x = CompleteMasterTable$LeagueIdx), stat="count") + labs(title = "Number of Observations in Analysis: Map Abilities Per Minute") + 
+  labs(x="League", y="Count")
+
+ggsave('../figures/MapAbilityHist.pdf', width = 7, height = 5, units = c("in"))
 
 # hot key vs select
 
@@ -113,6 +136,14 @@ hkRatioImg = hkRatioImg + ggtitle("Hot Key:Select Action Types by League")
 
 ggplot_build(hkRatioImg)
 ggsave('../figures/hkToSelect.pdf', width = 7, height = 5.5, units = c("in")) # making this a little taller for the title to fit
+
+## in response to reviewer request, a histogram of the number of observations that went into analysis.
+# reviewed: []
+# verified: []
+ggplot(data = HKVsSel) + geom_histogram(aes(x = HKVsSel$leagueRec), stat="count") + labs(title = "Number of Observations in Analysis: HotKey:Select Ratio") + 
+  labs(x="League", y="Count")
+
+ggsave('../figures/HKSelHist.pdf', width = 7, height = 5, units = c("in"))
 
 # run non-parametric alternative to one-way ANOVA to see if there's any difference between groups
 
