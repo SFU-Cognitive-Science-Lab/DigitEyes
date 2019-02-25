@@ -130,3 +130,12 @@ for (leagueNum in 2:7)
     # Effect size calculated here.
     bronzeVsLater[leagueNum-1,4] = cohensD(noNaNFAL$FAL[noNaNFAL$AllLeagueRec_FAL == 1],noNaNFAL$FAL[noNaNFAL$AllLeagueRec_FAL == leagueNum])
 }
+
+## in response to reviewer request, a histogram of the number of observations that went into analysis.
+# reviewed: []
+# verified: []
+ggplot(data = noNaNFAL) + geom_histogram(aes(x = noNaNFAL$AllLeagueRec_FAL), stat="count") + labs(title = "Number of Observations in Analysis: First Action Latency") + 
+  labs(x="League", y="Count")
+
+ggsave('../figures/FALHist.pdf', width = 7, height = 5, units = c("in"))
+
