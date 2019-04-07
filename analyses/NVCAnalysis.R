@@ -124,6 +124,8 @@ for (leagueNum in 2:7){
 # verified: []
 require('lme4')
 # read data
+unzip('../data/ultraTable.csv.zip', 'ultraTable.csv', exdir = '../data')
+
 ultraTab = read.table('ultraTable.csv', header = T, sep=',')
 ultraTabViable = ultraTab[ultraTab$in_analysis == 1,]
 
