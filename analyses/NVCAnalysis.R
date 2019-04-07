@@ -1,6 +1,6 @@
 " Author: Yue Chen & Robin C. A. Barrett
   Date Created: Apr 5 2017 
-  Last Edit: 
+  Last Edit: Apr 7 2019 - McColeman added LMER, histograms for supplementary
 
 Cognitive Science Lab, Simon Fraser University 
 Originally Created For: [StarTrak] 
@@ -117,3 +117,24 @@ for (leagueNum in 2:7){
     bronzeVsLater[leagueNum-1,4] = cohensD(noNaN_NVC$NVC[noNaN_NVC$AllLeagueRec_NVC == 1],noNaN_NVC$NVC[noNaN_NVC$AllLeagueRec_NVC == leagueNum])
 }
 
+
+
+## LMER
+# reviewed: []
+# verified: []
+require('lme4')
+# read data
+ultraTab = read.table('ultraTable.csv', header = T, sep=',')
+ultraTabViable = ultraTab[ultraTab$in_analysis == 1,]
+
+# specify data class
+ultraTabViable$NVC = as.numeric(as.character(ultraTabViable$NewViewCost))
+ultraTabViable$leagueidx = as.factor(ultraTabViable$leagueidx)
+# fit model
+lmeMod=lmer(NVC~leagueidx+(1|gameid),data=ultraTabViable, na.rm = T)
+
+## Number of observations histograms
+# reviewed: []
+# verified: []
+ObsHistDat = aggregate(NVC~leagueidx, data = ultraTabViable[!is.na(ultraTabViable$NVC),], FUN = length)
+histImg = ggplot(data = ObsHistDat, aes(x=leagueidx, y=NVC)) + geom_bar(stat='identity')
