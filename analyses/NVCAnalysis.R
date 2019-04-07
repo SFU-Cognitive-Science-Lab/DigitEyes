@@ -137,4 +137,7 @@ lmeMod=lmer(NVC~leagueidx+(1|gameid),data=ultraTabViable, na.rm = T)
 # reviewed: []
 # verified: []
 ObsHistDat = aggregate(NVC~leagueidx, data = ultraTabViable[!is.na(ultraTabViable$NVC),], FUN = length)
-histImg = ggplot(data = ObsHistDat, aes(x=leagueidx, y=NVC)) + geom_bar(stat='identity')
+histImg = ggplot(data = ObsHistDat, aes(x=leagueidx, y=NVC)) + geom_bar(stat='identity') 
+histImg = histImg + labs(title = "Number of New View Cost Observations by League", x = "League", y = "Count")
+
+ggsave('../figures/NVCRawHist.pdf', width = 7, height = 5, units = c("in"))
