@@ -27,7 +27,7 @@ require('lsr')
 this.dir <- dirname(parent.frame(2)$ofile)
 setwd(this.dir)
 
-setwd('../data/') # Move up and into data folder
+unzip('../data/ultraTable.csv.zip', 'ultraTable.csv', exdir = '../data')
 
 UltraTable = read.table('ultraTable.csv', header = TRUE, sep = ",")
 
@@ -102,3 +102,23 @@ ggplot(data = CompleteUltraTableNoBALNaN) + geom_histogram(aes(x = CompleteUltra
 
 ggsave('../figures/BALRawHist.pdf', width = 7, height = 5, units = c("in"))
 
+## LMER
+# reviewed: []
+# verified: []
+require('lme4')
+# read data
+
+# specify data class
+CompleteUltraTableNoBALNaN$betweenactionlatency = as.numeric(as.character(CompleteUltraTableNoBALNaN$betweenactionlatency))
+CompleteUltraTableNoBALNaN$leagueidx = as.factor(CompleteUltraTableNoBALNaN$leagueidx)
+# fit model
+lmeMod=lmer(betweenactionlatency~leagueidx+(1|gameid),data=CompleteUltraTableNoBALNaN)
+
+## Number of observations histograms
+# reviewed: []
+# verified: []
+ObsHistDat = aggregate(betweenactionlatency~leagueidx, data = CompleteUltraTableNoBALNaN, FUN = length)
+histImg = ggplot(data = ObsHistDat, aes(x=leagueidx, y=betweenactionlatency)) + geom_bar(stat='identity') 
+histImg = histImg + labs(title = "Number of Between Action Latency Observations by League", x = "League", y = "Count")
+
+ggsave('../figures/BALRawHist.pdf', width = 7, height = 5, units = c("in"))
