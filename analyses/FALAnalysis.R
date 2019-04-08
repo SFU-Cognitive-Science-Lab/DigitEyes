@@ -131,11 +131,34 @@ for (leagueNum in 2:7)
     bronzeVsLater[leagueNum-1,4] = cohensD(noNaNFAL$FAL[noNaNFAL$AllLeagueRec_FAL == 1],noNaNFAL$FAL[noNaNFAL$AllLeagueRec_FAL == leagueNum])
 }
 
-## in response to reviewer request, a histogram of the number of observations that went into analysis.
+## LMER
 # reviewed: []
 # verified: []
-ggplot(data = noNaNFAL) + geom_histogram(aes(x = noNaNFAL$AllLeagueRec_FAL), stat="count") + labs(title = "Number of Observations in Analysis: First Action Latency") + 
-  labs(x="League", y="Count")
+require('lme4')
 
-ggsave('../figures/FALHist.pdf', width = 7, height = 5, units = c("in"))
+# read data
+unzip('../data/ultraTable.csv.zip', 'ultraTable.csv', exdir = '../data')
+
+ultraTab = read.table('ultraTable.csv', header = T, sep=',')
+ultraTabViable = ultraTab[ultraTab$in_analysis == 1,]
+
+# specify data class
+ultraTabViable$ActionLatency = as.numeric(as.character(ultraTabViable$ActionLatency))
+ultraTabViable$leagueidx = as.factor(ultraTabViable$leagueidx)
+
+# fit model
+lmeBaseMod=lmer(ActionLatency~(1|gameid),data=ultraTabViable)
+lmeLeagueMod=lmer(ActionLatency~leagueidx+(1|gameid),data=ultraTabViable)
+
+anova(lmeBaseMod,lmeLeagueMod)
+
+## Number of observations histograms
+# reviewed: []
+# verified: []
+ObsHistDat = aggregate(ActionLatency~leagueidx, data = ultraTabViable[!is.na(ultraTabViable$ActionLatency),], FUN = length)
+histImg = ggplot(data = ObsHistDat, aes(x=leagueidx, y=ActionLatency)) + geom_bar(stat='identity') 
+histImg = histImg + labs(title = "Number of FAL Observations by League", x = "League", y = "Count")
+
+ggsave('../figures/FALRawHist.pdf', width = 7, height = 5, units = c("in"))
+
 
