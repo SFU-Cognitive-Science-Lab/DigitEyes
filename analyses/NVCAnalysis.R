@@ -133,7 +133,10 @@ ultraTabViable = ultraTab[ultraTab$in_analysis == 1,]
 ultraTabViable$NVC = as.numeric(as.character(ultraTabViable$NewViewCost))
 ultraTabViable$leagueidx = as.factor(ultraTabViable$leagueidx)
 # fit model
-lmeMod=lmer(NVC~leagueidx+(1|gameid),data=ultraTabViable, na.rm = T)
+lmeBaseMod=lmer(NVC~(1|gameid),data=ultraTabViable, na.rm = T)
+lmeLeagueMod=lmer(NVC~leagueidx+(1|gameid),data=ultraTabViable, na.rm = T)
+
+anova(lmeBaseMod,lmeLeagueMod)
 
 ## Number of observations histograms
 # reviewed: [Joe]
