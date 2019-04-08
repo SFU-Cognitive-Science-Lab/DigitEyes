@@ -1,4 +1,15 @@
-% sample code
+% Authors: Caitlyn McColeman
+% Date Created: Apr 8 2019
+% Last Edit: 
+%
+% Reviewed: 
+% Verified: 
+%
+% Institution: Simon Fraser University
+% DigitEyes Supplementary material
+
+% preparing revisit variables from the ultraTable in the shared ../data
+% folder
 
 % assumes we're starting in the DigitEyes directory in the "analyses"
 % folder.
