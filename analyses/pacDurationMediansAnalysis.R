@@ -31,7 +31,7 @@ if(.Platform$OS.type=="windows") {
   quartz<-function() windows()
 }
 
-isPAC = 1
+isPAC = 0 # if this is 1, it's PAC; if 0 it's fixation
 
 # Move to this directory, and use it as a reference point to find the data folder
 this.dir <- dirname(parent.frame(2)$ofile)
@@ -183,14 +183,43 @@ saveAsName = paste(fileNamePlot, '.pdf', sep="")
 ggplot_build(pacDurImg)
 ggsave(saveAsName, width = 7, height = 5, units = c("in"))
 
-## in response to reviewer request, a histogram of the number of observations that went into analysis.
+
+## LMER
 # reviewed: []
 # verified: []
-if(isPAC == 0){
-ggplot(data = noNaNMediansComplete, aes(noNaNMediansComplete$grandLeaguesOut)) + geom_histogram(aes(x=noNaNMediansComplete$grandLeaguesOut), stat="count") + labs(title = "Number of Observations in Analysis: Fixation Duration") + 
-    labs(x="League", y="Count")
-}else{ggplot(data = noNaNMediansComplete, aes(noNaNMediansComplete$grandLeaguesOut)) + geom_histogram(aes(x=noNaNMediansComplete$grandLeaguesOut), stat="count") + labs(title = "Number of Observations in Analysis: PAC Duration")+ 
-    labs(x="League", y="Count")}
+require('lme4')
+# read data
+unzip('../data/ultraTable.csv.zip', 'ultraTable.csv', exdir = '../data')
 
-histoName = paste(fileNamePlot, 'Hist.pdf', sep="")
-ggsave(histoName, width = 7, height = 5, units = c("in"))
+ultraTab = read.table('../data/ultraTable.csv', header = T, sep=',')
+ultraTabViable = ultraTab[ultraTab$in_analysis == 1,]
+
+# specify data class
+ultraTabViable$FixDuration = as.numeric(as.character(ultraTabViable$FixDuration))
+ultraTabViable$leagueidx = as.factor(ultraTabViable$leagueidx)
+
+if (isPAC == 1){
+analyzeDat = ultraTabViable[ultraTabViable$PACidx == 1, ] 
+histSaveName = '../figures/PACRawHist.pdf'
+histTitle = 'Number of PACs by League'
+} else { # fixations without actions
+  analyzeDat = ultraTabViable[ultraTabViable$PACidx == 0, ]   
+  histSaveName = '../figures/FixRawHist.pdf'
+  histTitle = 'Number of Fixations without Actions by League'
+}
+
+# fit model
+lmeBaseMod=lmer(FixDuration~(1|gameid),data=analyzeDat)
+lmeLeagueMod=lmer(FixDuration~leagueidx+(1|gameid),data=analyzeDat)
+
+anova(lmeBaseMod, lmeLeagueMod)
+
+## Number of observations histograms
+# reviewed: []
+# verified: []
+ObsHistDat = aggregate(FixDuration~leagueidx, data = analyzeDat, FUN = length)
+histImg = ggplot(data = ObsHistDat, aes(x=leagueidx, y=FixDuration)) + geom_bar(stat='identity') 
+histImg = histImg + labs(title = histTitle, x = "League", y = "Count")
+
+ggsave(histSaveName, width = 7, height = 5, units = c("in"))
+
