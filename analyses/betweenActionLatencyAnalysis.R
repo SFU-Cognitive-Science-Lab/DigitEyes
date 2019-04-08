@@ -29,16 +29,17 @@ setwd(this.dir)
 
 unzip('../data/ultraTable.csv.zip', 'ultraTable.csv', exdir = '../data')
 
-UltraTable = read.table('ultraTable.csv', header = TRUE, sep = ",")
+UltraTable = read.table('../data/ultraTable.csv', header = TRUE, sep = ",")
 
 # Make factor easier analysis
 UltraTable$leagueidx  = factor(UltraTable$leagueidx)
-
-CompleteUltraTable = UltraTable[complete.cases(UltraTable$betweenactionlatency),]
-CompleteUltraTable$betweenactionlatency = as.numeric(as.character(CompleteUltraTable$betweenactionlatency))/88.5347*1000 # convert to ms 
+UltraTable$BetweenActionLatency = as.numeric(as.character(UltraTable$BetweenActionLatency))/88.5347*1000 # convert to ms 
 
 
-meansByLeague = aggregate(as.numeric(as.character(CompleteUltraTable$betweenactionlatency)), by = list(CompleteUltraTable$gameid, CompleteUltraTable$leagueidx), FUN=mean, na.rm=TRUE)
+CompleteUltraTable = UltraTable[!is.na(UltraTable$BetweenActionLatency),]
+CompleteUltraTable = UltraTable[UltraTable$in_analysis == 1,]
+
+meansByLeague = aggregate(as.numeric(as.character(CompleteUltraTable$BetweenActionLatency)), by = list(CompleteUltraTable$gameid, CompleteUltraTable$leagueidx), FUN=mean, na.rm=TRUE)
 colnames(meansByLeague)=c('player', 'league', 'BAL')
 
 # Visualize
@@ -93,7 +94,7 @@ ggplot(data = meansByLeague) + geom_histogram(aes(x = meansByLeague$league), sta
 ggsave('../figures/BALHist.pdf', width = 7, height = 5, units = c("in"))
 
 # number of observations in the raw data 
-CompleteUltraTableNoBALNaN = CompleteUltraTable[!is.na(CompleteUltraTable$betweenactionlatency),]
+CompleteUltraTableNoBALNaN = CompleteUltraTable[!is.na(CompleteUltraTable$BetweenActionLatency),]
 
 ggplot(data = CompleteUltraTableNoBALNaN) + geom_histogram(aes(x = CompleteUltraTableNoBALNaN$leagueidx), stat="count") + labs(title = "Number of Observations in Dataset: BAL") + 
   labs(x="League", y="Count")
@@ -109,10 +110,13 @@ require('lme4')
 # read data
 
 # specify data class
-CompleteUltraTableNoBALNaN$betweenactionlatency = as.numeric(as.character(CompleteUltraTableNoBALNaN$betweenactionlatency))
+CompleteUltraTableNoBALNaN$betweenactionlatency = as.numeric(as.character(CompleteUltraTableNoBALNaN$BetweenActionLatency))
 CompleteUltraTableNoBALNaN$leagueidx = as.factor(CompleteUltraTableNoBALNaN$leagueidx)
 # fit model
-lmeMod=lmer(betweenactionlatency~leagueidx+(1|gameid),data=CompleteUltraTableNoBALNaN)
+lmeBaseMod=lmer(betweenactionlatency~(1|gameid),data=CompleteUltraTableNoBALNaN)
+lmeLeagueMod=lmer(betweenactionlatency~leagueidx+(1|gameid),data=CompleteUltraTableNoBALNaN)
+
+anova(lmeBaseMod, lmeLeagueMod)
 
 ## Number of observations histograms
 # reviewed: []
