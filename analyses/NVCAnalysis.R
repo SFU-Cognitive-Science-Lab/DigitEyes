@@ -136,7 +136,7 @@ ultraTabViable$leagueidx = as.factor(ultraTabViable$leagueidx)
 lmeMod=lmer(NVC~leagueidx+(1|gameid),data=ultraTabViable, na.rm = T)
 
 ## Number of observations histograms
-# reviewed: []
+# reviewed: [Joe]
 # verified: []
 ObsHistDat = aggregate(NVC~leagueidx, data = ultraTabViable[!is.na(ultraTabViable$NVC),], FUN = length)
 histImg = ggplot(data = ObsHistDat, aes(x=leagueidx, y=NVC)) + geom_bar(stat='identity') 
