@@ -185,7 +185,7 @@ ggsave(saveAsName, width = 7, height = 5, units = c("in"))
 
 
 ## LMER
-# reviewed: []
+# reviewed: [Joe]
 # verified: []
 require('lme4')
 # read data
@@ -215,7 +215,7 @@ lmeLeagueMod=lmer(FixDuration~leagueidx+(1|gameid),data=analyzeDat)
 anova(lmeBaseMod, lmeLeagueMod)
 
 ## Number of observations histograms
-# reviewed: []
+# reviewed: [Joe]
 # verified: []
 ObsHistDat = aggregate(FixDuration~leagueidx, data = analyzeDat, FUN = length)
 histImg = ggplot(data = ObsHistDat, aes(x=leagueidx, y=FixDuration)) + geom_bar(stat='identity') 
