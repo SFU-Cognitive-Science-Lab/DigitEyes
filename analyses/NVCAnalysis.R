@@ -120,7 +120,7 @@ for (leagueNum in 2:7){
 
 
 ## LMER
-# reviewed: []
+# reviewed: [Joe]
 # verified: []
 require('lme4')
 # read data
