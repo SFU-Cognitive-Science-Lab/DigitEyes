@@ -86,7 +86,7 @@ for (leagueNum in 2:7){
 }
 
 ## in response to reviewer request, a histogram of the number of observations that went into analysis.
-# reviewed: []
+# reviewed: [Joe]
 # verified: []
 ggplot(data = meansByLeague) + geom_histogram(aes(x = meansByLeague$league), stat="count") + labs(title = "Number of Observations in Analysis: BAL") + 
   labs(x="League", y="Count")
@@ -104,7 +104,7 @@ ggplot(data = CompleteUltraTableNoBALNaN) + geom_histogram(aes(x = CompleteUltra
 ggsave('../figures/BALRawHist.pdf', width = 7, height = 5, units = c("in"))
 
 ## LMER
-# reviewed: []
+# reviewed: [Joe]
 # verified: []
 require('lme4')
 # read data
@@ -119,7 +119,7 @@ lmeLeagueMod=lmer(betweenactionlatency~leagueidx+(1|gameid),data=CompleteUltraTa
 anova(lmeBaseMod, lmeLeagueMod)
 
 ## Number of observations histograms
-# reviewed: []
+# reviewed: [Joe]
 # verified: []
 ObsHistDat = aggregate(betweenactionlatency~leagueidx, data = CompleteUltraTableNoBALNaN, FUN = length)
 histImg = ggplot(data = ObsHistDat, aes(x=leagueidx, y=betweenactionlatency)) + geom_bar(stat='identity') 
