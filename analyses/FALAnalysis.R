@@ -132,7 +132,7 @@ for (leagueNum in 2:7)
 }
 
 ## LMER
-# reviewed: []
+# reviewed: [Joe]
 # verified: []
 require('lme4')
 
@@ -153,7 +153,7 @@ lmeLeagueMod=lmer(ActionLatency~leagueidx+(1|gameid),data=ultraTabViable)
 anova(lmeBaseMod,lmeLeagueMod)
 
 ## Number of observations histograms
-# reviewed: []
+# reviewed: [Joe]
 # verified: []
 ObsHistDat = aggregate(ActionLatency~leagueidx, data = ultraTabViable[!is.na(ultraTabViable$ActionLatency),], FUN = length)
 histImg = ggplot(data = ObsHistDat, aes(x=leagueidx, y=ActionLatency)) + geom_bar(stat='identity') 
