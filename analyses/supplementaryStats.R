@@ -18,15 +18,13 @@ OUTPUT: "
 
 
 # 1. raw, PAC level table for supplementary
-ultraTab = read.table('../data/ultraTable.csv', header = T, sep=',')
-
 unzip('../data/ultraTable.csv.zip', 'ultraTable.csv', exdir = '../data')
 
 ultraTab = read.table('../data/ultraTable.csv', header = T, sep=',')
 ultraTabViable = ultraTab[ultraTab$in_analysis == 1,]
 
 # 2. additional statistics for reported measures in DigitEyes manuscript
-masterTab = read.table('masterTable.csv')
+masterTab = read.table('../data/masterTable.csv', header = TRUE, sep = ",")
 
 
 leagueObs = aggregate(ultraTabViable$gameid ~ leagueidx, data = ultraTabViable, FUN = function(x) c(nParticipants = length(unique(x))))
@@ -73,16 +71,52 @@ PACVariables = round(PACVariables, digits = 2)
 ##                    Section 2: Statistical supplement for all reported data in the DigitEyes manuscript
 ## ============================ # ============================ # ============================ # ============================ ##
 
-# A. Fixation Duration                (via Master table; one observation per participant)
-# B. Perception Action Cycle Duration (via Master table; one observation per participant)
+# A. Fixation Duration                (via fixMedianNonPAC; one observation per participant)
+FixDurData = read.delim("../data/fixMedianNonPAC.txt", sep = ',')
+FixDurData$grandMediansOut = FixDurData$grandMediansOut/88.5347*1000
+FixDurStats = aggregate(FixDurData$grandMediansOut ~ grandLeaguesOut, data = FixDurData, FUN = function(x) c(meanVal = mean(x), SD = sd(x), medianVal = median(x)))
+names(FixDurStats) <- c("leagueIdx", "FixationDuration")
+
+# B. Perception Action Cycle Duration (via fixMedianPAC; one observation per participant)
+PACDurData = read.delim("../data/fixMedianPAC.txt", sep = ",")
+PACDurData$grandMediansOut = PACDurData$grandMediansOut/88.5347*1000
+PACDurStats = aggregate(PACDurData$grandMediansOut ~ grandLeaguesOut, data = PACDurData, FUN = function(x) c(meanVal = mean(x), SD = sd(x), medianVal = median(x)))
+names(PACDurStats) <- c("leagueIdx", "PAC Duration")
+
 # C. First Action Latency             (via Master table; one observation per participant)
-# D. Between Action Latency           (via Master table; one observation per participant)
+FALData <- data.frame("leagueIdx" = masterTab$leagueidx, "FAL" = masterTab$pacactionlatencymean)
+FALData$FAL = FALData$FAL/88.5347*1000
+
+FALData = FALData[complete.cases(FALData$FAL),]
+FALData = FALData[is.finite(FALData$FAL),]
+
+FALStats = aggregate(FALData$FAL ~ leagueIdx, data = FALData, FUN = function(x) c(meanVal = mean(x), SD = sd(x), medianVal = median(x)))
+names(FALStats)[2] <- ("FAL")
+
+# D. Between Action Latency           (via Ultra table; one observation per participant)
+BALData <- data.frame("leagueIdx" = ultraTabViable$leagueidx, "BAL" = ultraTabViable$BetweenActionLatency)
+BALData = BALData[!is.na(BALData$BAL),]
+
+BALStats = aggregate(BALData$BAL ~ leagueIdx, data = BALData, FUN = function(x) c(meanVal = mean(x), SD = sd(x), medianVal = median(x)))
+names(BALStats)[2] <- ("BAL")
+
 # E. New View Cost                    (via NVC.csv)
 # F. Fixation Rate                    (via SC2FixRate.csv)
 # G. Fixation rate                    (via EyeTrackFixRate.csv)
 # H. Distance between fixations       (via saccadeAmplitude.csv)
 # I. HK:Select                        (via hkVSSel.csv)
 # J. OffScreen Production             (via playerOnOffProduction.csv)
-# H. Mini-Map Ability                 (via Mastesr table; one observation per participant)
-# I. Mini-Map Attacks                 (via Mastesr table; one observation per participant)
-# J. Mini-Map Right Clicks            (via Mastesr table; one observation per participant)
+
+# H. Mini-Map Ability                 (via Master table; one observation per participant)
+MapAblStats = aggregate(masterTab$MapAblPerMin ~ leagueidx, data = masterTab, FUN = function(x) c(meanVal = mean(x), SD = sd(x), medianVal = median(x)))
+names(MapAblStats)[2] <- ("MapAblPerMin")
+
+# I. Mini-Map Attacks                 (via Master table; one observation per participant)
+MapAtkStats = aggregate(masterTab$MapAtkPerMin ~ leagueidx, data = masterTab, FUN = function(x) c(meanVal = mean(x), SD = sd(x), medianVal = median(x)))
+names(MapAtkStats)[2] <- ("MapAtkPerMin")
+
+# J. Mini-Map Right Clicks            (via Master table; one observation per participant)
+MapRCStats = aggregate(masterTab$MapRCPerMin ~ leagueidx, data = masterTab, FUN = function(x) c(meanVal = mean(x), SD = sd(x), medianVal = median(x)))
+names(MapRCStats)[2] <- ("MapRCPerMin")
+
+
