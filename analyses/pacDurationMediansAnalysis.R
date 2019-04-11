@@ -212,7 +212,10 @@ histTitle = 'Number of PACs by League'
 lmeBaseMod=lmer(FixDuration~(1|gameid),data=analyzeDat)
 lmeLeagueMod=lmer(FixDuration~leagueidx+(1|gameid),data=analyzeDat)
 
-anova(lmeBaseMod, lmeLeagueMod)
+confidenceIntervals = confint(lmeLeagueMod, "beta_", level = 0.95)
+
+modelDifference = anova(lmeBaseMod, lmeLeagueMod)
+
 
 ## Number of observations histograms
 # reviewed: [Joe]
