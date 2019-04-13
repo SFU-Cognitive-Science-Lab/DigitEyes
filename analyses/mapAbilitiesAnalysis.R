@@ -158,7 +158,7 @@ ggsave('../figures/HKSelHist.pdf', width = 7, height = 5, units = c("in"))
 MapRCResult=kruskal.test(CompleteMasterTable$MapRCPerMin~CompleteMasterTable$LeagueIdx)
 MapAtkResult=kruskal.test(CompleteMasterTable$MapAtkPerMin~CompleteMasterTable$LeagueIdx)
 MapAblResult=kruskal.test(CompleteMasterTable$MapAblPerMin~CompleteMasterTable$LeagueIdx)
-HKVsSelResult=kruskal.test(HKVsSel$ratioRec~HKVsSel$leagueRec)
+HKVsSelResult=kruskal.test(HKVsSel$ratioRec~HKVsSel$LeagueIdx)
 
 # get effect size, as per TOMCZAK & TOMCZAK (2014). Reference: http://www.tss.awf.poznan.pl/files/3_Trends_Vol21_2014__no1_20.pdf
 
@@ -179,7 +179,7 @@ etaSqAbl = (HAbl - kAbl + 1)/(nAbl-kAbl)
 
 HHKSel = HKVsSelResult$statistic # hotkey:select ratio
 kHKSel = HKVsSelResult$parameter + 1
-nHKSel = length(unique(HKVsSel$gameRec));
+nHKSel = length(unique(HKVsSel$gameid));
 etaSqHKSel = (HHKSel - kHKSel + 1)/(nHKSel-kHKSel)
 
 
@@ -221,4 +221,4 @@ effectByLeagueAtk = effectSizeTTest(CompleteMasterTable$MapAtkPerMin,CompleteMas
 
 effectByLeagueAbl = effectSizeTTest(CompleteMasterTable$MapAblPerMin,CompleteMasterTable$LeagueIdx)
 
-effectByLeagueHKvS = effectSizeTTest(HKVsSel$ratioRec,HKVsSel$leagueRec)
+effectByLeagueHKvS = effectSizeTTest(HKVsSel$ratioRec,HKVsSel$LeagueIdx)
