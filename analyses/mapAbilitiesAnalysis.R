@@ -148,10 +148,11 @@ ggsave('../figures/hkToSelect.pdf', width = 7, height = 5.5, units = c("in")) # 
 ## in response to reviewer request, a histogram of the number of observations that went into analysis.
 # reviewed: []
 # verified: []
-ggplot(data = HKVsSel) + geom_histogram(aes(x = HKVsSel$leagueRec), stat="count") + labs(title = "Number of Observations in Analysis: HotKey:Select Ratio") + 
+ggplot(data = HKVsSel) + geom_histogram(aes(x = HKVsSel$leagueIdx), stat="count") + labs(title = "Number of Observations in Analysis: HotKey:Select Ratio") + 
   labs(x="League", y="Count")
 
 ggsave('../figures/HKSelHist.pdf', width = 7, height = 5, units = c("in"))
+write.csv(HKVsSel, file = "../data/hkVSSel.csv")
 
 # run non-parametric alternative to one-way ANOVA to see if there's any difference between groups
 
