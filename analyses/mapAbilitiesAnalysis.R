@@ -122,11 +122,19 @@ ggsave('../figures/MapAbilityHist.pdf', width = 7, height = 5, units = c("in"))
 
 # hot key vs select
 
+# [] updated from Joe's discovery about dropped selects
+hkSel = read.table('../data/hkSelectCounts.csv', sep = ',', header = T)
+sels = read.table('../data/selectCounts.csv', sep = ',', header = T)
+
+HKVsSel = merge(hkSel, sels);
+
+HKVsSel$ratioRec = HKVsSel$HKselCount / HKVsSel$SelCount
+
 quartz()
 
-HKVsSel$leagueRec <- as.factor(HKVsSel$leagueRec)
+HKVsSel$LeagueIdx <- as.factor(HKVsSel$LeagueIdx)
 
-hkRatioImg = ggplot(HKVsSel[!(HKVsSel$leagueRec == 0),], aes(factor(leagueRec),ratioRec))
+hkRatioImg = ggplot(HKVsSel[!(HKVsSel$LeagueIdx == 0),], aes(factor(LeagueIdx),ratioRec))
 hkRatioImg = hkRatioImg + geom_jitter(height = 0, width = 0.2, alpha = .1)
 hkRatioImg = hkRatioImg + theme_bw() + theme_bw() + theme(text = element_text(size=25), panel.grid.major = element_blank(), plot.title = element_text(size=25)) 
 hkRatioImg = hkRatioImg + geom_violin(alpha = .2, fill = "#C0C0C0", colour = "#C0C0C0")
