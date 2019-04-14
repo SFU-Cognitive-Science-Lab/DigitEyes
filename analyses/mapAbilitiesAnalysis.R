@@ -122,11 +122,19 @@ ggsave('../figures/MapAbilityHist.pdf', width = 7, height = 5, units = c("in"))
 
 # hot key vs select
 
+# [] updated from Joe's discovery about dropped selects
+hkSel = read.table('../data/hkSelectCounts.csv', sep = ',', header = T)
+sels = read.table('../data/selectCounts.csv', sep = ',', header = T)
+
+HKVsSel = merge(hkSel, sels);
+
+HKVsSel$ratioRec = HKVsSel$HKselCount / HKVsSel$SelCount
+
 quartz()
 
-HKVsSel$leagueRec <- as.factor(HKVsSel$leagueRec)
+HKVsSel$LeagueIdx <- as.factor(HKVsSel$LeagueIdx)
 
-hkRatioImg = ggplot(HKVsSel[!(HKVsSel$leagueRec == 0),], aes(factor(leagueRec),ratioRec))
+hkRatioImg = ggplot(HKVsSel[!(HKVsSel$LeagueIdx == 0),], aes(factor(LeagueIdx),ratioRec))
 hkRatioImg = hkRatioImg + geom_jitter(height = 0, width = 0.2, alpha = .1)
 hkRatioImg = hkRatioImg + theme_bw() + theme_bw() + theme(text = element_text(size=25), panel.grid.major = element_blank(), plot.title = element_text(size=25)) 
 hkRatioImg = hkRatioImg + geom_violin(alpha = .2, fill = "#C0C0C0", colour = "#C0C0C0")
@@ -140,17 +148,18 @@ ggsave('../figures/hkToSelect.pdf', width = 7, height = 5.5, units = c("in")) # 
 ## in response to reviewer request, a histogram of the number of observations that went into analysis.
 # reviewed: []
 # verified: []
-ggplot(data = HKVsSel) + geom_histogram(aes(x = HKVsSel$leagueRec), stat="count") + labs(title = "Number of Observations in Analysis: HotKey:Select Ratio") + 
+ggplot(data = HKVsSel) + geom_histogram(aes(x = HKVsSel$leagueIdx), stat="count") + labs(title = "Number of Observations in Analysis: HotKey:Select Ratio") + 
   labs(x="League", y="Count")
 
 ggsave('../figures/HKSelHist.pdf', width = 7, height = 5, units = c("in"))
+write.csv(HKVsSel, file = "../data/hkVSSel.csv")
 
 # run non-parametric alternative to one-way ANOVA to see if there's any difference between groups
 
 MapRCResult=kruskal.test(CompleteMasterTable$MapRCPerMin~CompleteMasterTable$LeagueIdx)
 MapAtkResult=kruskal.test(CompleteMasterTable$MapAtkPerMin~CompleteMasterTable$LeagueIdx)
 MapAblResult=kruskal.test(CompleteMasterTable$MapAblPerMin~CompleteMasterTable$LeagueIdx)
-HKVsSelResult=kruskal.test(HKVsSel$ratioRec~HKVsSel$leagueRec)
+HKVsSelResult=kruskal.test(HKVsSel$ratioRec~HKVsSel$LeagueIdx)
 
 # get effect size, as per TOMCZAK & TOMCZAK (2014). Reference: http://www.tss.awf.poznan.pl/files/3_Trends_Vol21_2014__no1_20.pdf
 
@@ -171,7 +180,7 @@ etaSqAbl = (HAbl - kAbl + 1)/(nAbl-kAbl)
 
 HHKSel = HKVsSelResult$statistic # hotkey:select ratio
 kHKSel = HKVsSelResult$parameter + 1
-nHKSel = length(unique(HKVsSel$gameRec));
+nHKSel = length(unique(HKVsSel$gameid));
 etaSqHKSel = (HHKSel - kHKSel + 1)/(nHKSel-kHKSel)
 
 
@@ -213,4 +222,4 @@ effectByLeagueAtk = effectSizeTTest(CompleteMasterTable$MapAtkPerMin,CompleteMas
 
 effectByLeagueAbl = effectSizeTTest(CompleteMasterTable$MapAblPerMin,CompleteMasterTable$LeagueIdx)
 
-effectByLeagueHKvS = effectSizeTTest(HKVsSel$ratioRec,HKVsSel$leagueRec)
+effectByLeagueHKvS = effectSizeTTest(HKVsSel$ratioRec,HKVsSel$LeagueIdx)
