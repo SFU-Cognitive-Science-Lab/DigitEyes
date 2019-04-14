@@ -54,7 +54,7 @@ if (isPAC == 1){ # PAC durations
 {
   pacDurationMedians = read.table('fixMedianNonPAC.txt', header = TRUE, sep = ",")
   
-  # Details for labelling plots
+  # Details for labeling plots
   mainTitle ="Fixation Duration by League"
   yLabel = "Median Fixation Duration (ms)" 
   
@@ -118,7 +118,7 @@ boxplot(grandMediansOut~grandLeaguesOut,data=noNaNMediansComplete)
 quartz()
 boxplot(grandMediansOut~grandLeaguesOut,data=noNaNMediansComplete, notch=FALSE, 
         col=rgb(0, 50/255, 130/255), border = rgb(.5, .5, .5), medcol = "white",
-        main="Durations of Perception Action Cycles", xlab="League", ylab = "Fixation Duration")
+        main="Median durations of Perception Action Cycles", xlab="League", ylab = "Fixation Duration")
 
 
 # Variance fails ANOVA assumptions. Check Levene's test again with log-transformation.
@@ -209,20 +209,21 @@ histTitle = 'Number of PACs by League'
 }
 
 # fit model
+# reviewed: []
+# verified: [Jordan]
 lmeBaseMod=lmer(FixDuration~(1|gameid),data=analyzeDat)
 lmeLeagueMod=lmer(FixDuration~leagueidx+(1|gameid),data=analyzeDat)
-
 confidenceIntervals = confint(lmeLeagueMod, "beta_", level = 0.95)
-
 modelDifference = anova(lmeBaseMod, lmeLeagueMod)
 
 
 ## Number of observations histograms
 # reviewed: [Joe]
-# verified: []
+# verified: [Jordan]
+#    - note: I think proportion of games could be a more useful measure.JB.
+
 ObsHistDat = aggregate(FixDuration~leagueidx, data = analyzeDat, FUN = length)
 histImg = ggplot(data = ObsHistDat, aes(x=leagueidx, y=FixDuration)) + geom_bar(stat='identity') 
 histImg = histImg + labs(title = histTitle, x = "League", y = "Count")
-
 ggsave(histSaveName, width = 7, height = 5, units = c("in"))
 

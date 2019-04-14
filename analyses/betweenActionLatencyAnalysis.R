@@ -105,7 +105,7 @@ ggsave('../figures/BALRawHist.pdf', width = 7, height = 5, units = c("in"))
 
 ## LMER
 # reviewed: [Joe]
-# verified: []
+# verified: [Jordan]
 require('lme4')
 # read data
 
@@ -120,7 +120,7 @@ anova(lmeBaseMod, lmeLeagueMod)
 
 ## Number of observations histograms
 # reviewed: [Joe]
-# verified: []
+# verified: [Jordan]
 ObsHistDat = aggregate(betweenactionlatency~leagueidx, data = CompleteUltraTableNoBALNaN, FUN = length)
 histImg = ggplot(data = ObsHistDat, aes(x=leagueidx, y=betweenactionlatency)) + geom_bar(stat='identity') 
 histImg = histImg + labs(title = "Number of Between Action Latency Observations by League", x = "League", y = "Count")

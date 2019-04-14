@@ -121,12 +121,12 @@ for (leagueNum in 2:7){
 
 ## LMER
 # reviewed: [Joe]
-# verified: []
+# verified: [Jordan]
 require('lme4')
 # read data
 unzip('../data/ultraTable.csv.zip', 'ultraTable.csv', exdir = '../data')
 
-ultraTab = read.table('ultraTable.csv', header = T, sep=',')
+ultraTab = read.table('../data/ultraTable.csv', header = T, sep=',')
 ultraTabViable = ultraTab[ultraTab$in_analysis == 1,]
 
 # specify data class
@@ -140,7 +140,7 @@ anova(lmeBaseMod,lmeLeagueMod)
 
 ## Number of observations histograms
 # reviewed: [Joe]
-# verified: []
+# verified: [Jordan]
 ObsHistDat = aggregate(NVC~leagueidx, data = ultraTabViable[!is.na(ultraTabViable$NVC),], FUN = length)
 histImg = ggplot(data = ObsHistDat, aes(x=leagueidx, y=NVC)) + geom_bar(stat='identity') 
 histImg = histImg + labs(title = "Number of New View Cost Observations by League", x = "League", y = "Count")

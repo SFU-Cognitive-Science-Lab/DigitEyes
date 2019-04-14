@@ -133,13 +133,13 @@ for (leagueNum in 2:7)
 
 ## LMER
 # reviewed: [Joe]
-# verified: []
+# verified: [Jordan]
 require('lme4')
 
 # read data
 unzip('../data/ultraTable.csv.zip', 'ultraTable.csv', exdir = '../data')
 
-ultraTab = read.table('ultraTable.csv', header = T, sep=',')
+ultraTab = read.table('../data/ultraTable.csv', header = T, sep=',')
 ultraTabViable = ultraTab[ultraTab$in_analysis == 1,]
 
 # specify data class
@@ -147,14 +147,14 @@ ultraTabViable$ActionLatency = as.numeric(as.character(ultraTabViable$ActionLate
 ultraTabViable$leagueidx = as.factor(ultraTabViable$leagueidx)
 
 # fit model
+
 lmeBaseMod=lmer(ActionLatency~(1|gameid),data=ultraTabViable)
 lmeLeagueMod=lmer(ActionLatency~leagueidx+(1|gameid),data=ultraTabViable)
-
 anova(lmeBaseMod,lmeLeagueMod)
 
 ## Number of observations histograms
 # reviewed: [Joe]
-# verified: []
+# verified: [Jordan]
 ObsHistDat = aggregate(ActionLatency~leagueidx, data = ultraTabViable[!is.na(ultraTabViable$ActionLatency),], FUN = length)
 histImg = ggplot(data = ObsHistDat, aes(x=leagueidx, y=ActionLatency)) + geom_bar(stat='identity') 
 histImg = histImg + labs(title = "Number of FAL Observations by League", x = "League", y = "Count")
