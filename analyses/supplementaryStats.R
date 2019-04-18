@@ -1,4 +1,4 @@
-" Author: Caitlyn McColeman
+" Author: Caitlyn McColeman & Tyrus Tracey
   Date Created: Apr 8 2019 
 Last Edit:
 
@@ -101,21 +101,46 @@ BALStats = aggregate(BALData$BAL ~ leagueIdx, data = BALData, FUN = function(x) 
 names(BALStats)[2] <- ("BAL")
 
 # E. New View Cost                    (via NVC.csv)
+NVCData = read.delim("../data/NVC.csv", sep = ',')
+NVCStats = aggregate(NVCData$NVC ~ AllLeagueRec_NVC, data = NVCData, FUN = function(x) c(meanVal = mean(x), SD = sd(x), medianVal = median(x)))
+names(NVCStats) <- c("leagueIdx", "NewViewCost")
+
 # F. Fixation Rate                    (via SC2FixRate.csv)
 # G. Fixation rate                    (via EyeTrackFixRate.csv)
-# H. Distance between fixations       (via saccadeAmplitude.csv)
-# I. HK:Select                        (via hkVSSel.csv)
-# J. OffScreen Production             (via playerOnOffProduction.csv)
 
-# H. Mini-Map Ability                 (via Master table; one observation per participant)
+# H. Distance between fixations       (via saccadeAmplitude.csv)
+amplitudeData = read.delim("../data/saccadeAmplitude.csv", sep = ',')
+amplitudeData = amplitudeData[is.finite(amplitudeData$Scouts),]
+
+amplitudeStats = aggregate(amplitudeData$Scouts ~ AllLeagueRec_Scouts, data = amplitudeData, FUN = function(x) c(meanVal = mean(x), SD = sd(x), medianVal = median(x)))
+
+names(amplitudeStats) <- c("League", "Amplitude")
+
+# I. HK:Select                        (via hkVSSel.csv)
+HKtoSelData = read.delim("../data/hkVSSel.csv", sep = ',')
+HKtoSelData = HKtoSelData[is.finite(HKtoSelData$ratioRec),]
+
+HKtoSelStats = aggregate(ratioRec ~ LeagueIdx.x, data = HKtoSelData, FUN = function(x) c(meanVal = mean(x), SD = sd(x), medianVal = median(x)))
+
+names(HKtoSelStats) <- c("League", "HotkeyToSelectRatio")
+
+# J. OffScreen Production             (via playerOnOffProduction.csv)
+OffScreenProdData = read.delim("../data/playerOnOffProduction.csv", sep = ',')
+
+OffScreenPercentStats = aggregate(OffScreenPercent ~ LeagueNum, data = OffScreenProdData, FUN = function(x) c(meanVal = mean(x), SD = sd(x), medianVal = median(x)))
+
+names(OffScreenPercentStats) <- c("League", "OffScreenPercent")
+
+
+# L. Mini-Map Ability                 (via Master table; one observation per participant)
 MapAblStats = aggregate(masterTab$MapAblPerMin ~ leagueidx, data = masterTab, FUN = function(x) c(meanVal = mean(x), SD = sd(x), medianVal = median(x)))
 names(MapAblStats)[2] <- ("MapAblPerMin")
 
-# I. Mini-Map Attacks                 (via Master table; one observation per participant)
+# M. Mini-Map Attacks                 (via Master table; one observation per participant)
 MapAtkStats = aggregate(masterTab$MapAtkPerMin ~ leagueidx, data = masterTab, FUN = function(x) c(meanVal = mean(x), SD = sd(x), medianVal = median(x)))
 names(MapAtkStats)[2] <- ("MapAtkPerMin")
 
-# J. Mini-Map Right Clicks            (via Master table; one observation per participant)
+# N. Mini-Map Right Clicks            (via Master table; one observation per participant)
 MapRCStats = aggregate(masterTab$MapRCPerMin ~ leagueidx, data = masterTab, FUN = function(x) c(meanVal = mean(x), SD = sd(x), medianVal = median(x)))
 names(MapRCStats)[2] <- ("MapRCPerMin")
 

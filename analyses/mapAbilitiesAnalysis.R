@@ -126,9 +126,9 @@ ggsave('../figures/MapAbilityHist.pdf', width = 7, height = 5, units = c("in"))
 hkSel = read.table('../data/hkSelectCounts.csv', sep = ',', header = T)
 sels = read.table('../data/selectCounts.csv', sep = ',', header = T)
 
-HKVsSel = merge(hkSel, sels);
+HKVsSel = merge(hkSel, sels, by=c("gameid", "gameid"));
 
-HKVsSel$ratioRec = HKVsSel$HKselCount / HKVsSel$SelCount
+HKVsSel$ratioRec = HKVsSel$HKselCount / HKVsSel$selCount
 
 quartz()
 
