@@ -148,9 +148,9 @@ output=matrix(, nrow = 15, ncol = Replications)
 for (i in 1:Replications){
   
   #subsample
-  new_data <- noNaN_NVC %>% group_by(leagueidx) %>% sample_n(167, replace=FALSE)
+  new_data <- CompleteUltraTableNoBALNaN %>% group_by(leagueidx) %>% sample_n(167, replace=FALSE)
   #aov and tukey
-  Anova=aov(new_data$NVC~new_data$leagueidx)
+  Anova=aov(new_data$betweenactionlatency ~new_data$leagueidx)
   TUKEY=TukeyHSD(Anova)$`new_data$leagueidx`[,4]
   
   #record pvalues
