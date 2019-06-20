@@ -161,4 +161,40 @@ histImg = histImg + labs(title = "Number of FAL Observations by League", x = "Le
 
 ggsave('../figures/FALRawHist.pdf', width = 7, height = 5, units = c("in"))
 
+### Bootstrap Tukey
+
+# reviewed by Caitlyn [Jun 19 2019]
+
+set.seed(1) # to make sampling reproducible
+
+library(dplyr)
+
+#drop league 7
+ToRemove=which(ultraTabViable$leagueidx=='7')
+ultraTabViable=ultraTabViable[-ToRemove,]
+ultraTabViable$leagueidx=droplevels(ultraTabViable$leagueidx)
+
+#set number of samples
+Replications=50
+#initialize
+output=matrix(, nrow = 15, ncol = Replications)
+
+for (i in 1:Replications){
+  
+  #subsample
+  new_data <- ultraTabViable %>% group_by(leagueidx) %>% sample_n(167, replace=FALSE)
+  #aov and tukey
+  Anova=aov(new_data$ActionLatency~new_data$leagueidx)
+  TUKEY=TukeyHSD(Anova)$`new_data$leagueidx`[,4]
+  
+  #record pvalues
+  output[1:length(TUKEY),i]=TUKEY
+}
+
+#mean pvalues, and produce output
+RowMEANZ=rowMeans(output)
+FinalOutput=data.frame(as.factor(row.names(TukeyHSD(Anova)$`new_data$leagueidx`)),RowMEANZ)
+names(FinalOutput)=c('Comparison','Mean PValue')
+FinalOutput
+
 
