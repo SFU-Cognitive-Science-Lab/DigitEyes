@@ -146,3 +146,39 @@ histImg = ggplot(data = ObsHistDat, aes(x=leagueidx, y=NVC)) + geom_bar(stat='id
 histImg = histImg + labs(title = "Number of New View Cost Observations by League", x = "League", y = "Count")
 
 ggsave('../figures/NVCRawHist.pdf', width = 7, height = 5, units = c("in"))
+
+### Bootstrap Tukey
+
+# reviewed by Caitlyn [Jun 19 2019]
+ 
+set.seed(1) # to make sampling reproducible
+
+library(dplyr)
+
+#drop league 7
+ToRemove=which(noNaN_NVC$AllLeagueRec_NVC=='7')
+noNaN_NVC=noNaN_NVC[-ToRemove,]
+noNaN_NVC$AllLeagueRec_NVC=droplevels(noNaN_NVC$AllLeagueRec_NVC)
+
+#set number of samples
+Replications=50
+#initialize
+output=matrix(, nrow = 15, ncol = Replications)
+
+for (i in 1:Replications){
+
+  #subsample
+new_data <- noNaN_NVC %>% group_by(AllLeagueRec_NVC) %>% sample_n(167, replace=FALSE)
+#aov and tukey
+Anova=aov(new_data$NVC~new_data$AllLeagueRec_NVC)
+TUKEY=TukeyHSD(Anova)$`new_data$AllLeagueRec_NVC`[,4]
+
+#record pvalues
+output[1:length(TUKEY),i]=TUKEY
+}
+
+#mean pvalues, and produce output
+RowMEANZ=rowMeans(output)
+FinalOutput=data.frame(as.factor(row.names(TukeyHSD(Anova)$`new_data$AllLeagueRec_NVC`)),RowMEANZ)
+names(FinalOutput)=c('Comparison','Mean PValue')
+FinalOutput
