@@ -35,9 +35,10 @@ UltraTable = read.table('../data/ultraTable.csv', header = TRUE, sep = ",")
 UltraTable$leagueidx  = factor(UltraTable$leagueidx)
 UltraTable$BetweenActionLatency = as.numeric(as.character(UltraTable$BetweenActionLatency))/88.5347*1000 # convert to ms 
 
-
+##LINE 37## CompleteUltraTable would call for in_analysis in UltraTable, which would overwrite the cleaning of NaNs from line 36. -TT
+## CompleteUltraTable is now properly cleaned for unwanted rows. 
 CompleteUltraTable = UltraTable[!is.na(UltraTable$BetweenActionLatency),]
-CompleteUltraTable = UltraTable[UltraTable$in_analysis == 1,]
+CompleteUltraTable = CompleteUltraTable[CompleteUltraTable$in_analysis == 1,]
 
 meansByLeague = aggregate(as.numeric(as.character(CompleteUltraTable$BetweenActionLatency)), by = list(CompleteUltraTable$gameid, CompleteUltraTable$leagueidx), FUN=mean, na.rm=TRUE)
 colnames(meansByLeague)=c('player', 'league', 'BAL')
@@ -94,6 +95,8 @@ ggplot(data = meansByLeague) + geom_histogram(aes(x = meansByLeague$league), sta
 ggsave('../figures/BALHist.pdf', width = 7, height = 5, units = c("in"))
 
 # number of observations in the raw data 
+##LINE 97## Because CompleteUltraTable now no longer has NaNs there is no need for CompleteUltraTableNoBALNaN
+## CompleteUltraTableNoBALNaN should be replaced by CompleteUltraTable for simplicity and clarity -TT
 CompleteUltraTableNoBALNaN = CompleteUltraTable[!is.na(CompleteUltraTable$BetweenActionLatency),]
 
 ggplot(data = CompleteUltraTableNoBALNaN) + geom_histogram(aes(x = CompleteUltraTableNoBALNaN$leagueidx), stat="count") + labs(title = "Number of Observations in Dataset: BAL") + 
@@ -125,6 +128,8 @@ ObsHistDat = aggregate(betweenactionlatency~leagueidx, data = CompleteUltraTable
 histImg = ggplot(data = ObsHistDat, aes(x=leagueidx, y=betweenactionlatency)) + geom_bar(stat='identity') 
 histImg = histImg + labs(title = "Number of Between Action Latency Observations by League", x = "League", y = "Count")
 
+##LINE133## There's two figures being saved as BALRawHist.pdf (line 107) -TT
+## They'll show up individually in RStudio but the first one gets overwritten when you look from the figures folder
 ggsave('../figures/BALRawHist.pdf', width = 7, height = 5, units = c("in"))
 
 ### Bootstrap Tukey
@@ -143,6 +148,8 @@ CompleteUltraTableNoBALNaN$leagueidx=droplevels(CompleteUltraTableNoBALNaN$leagu
 #set number of samples
 Replications=50
 #initialize
+##LINE 153## I'm getting a warning that the matrix function is missing the first argument.
+## Just double checking whether this is intentional. -TT
 output=matrix(, nrow = 15, ncol = Replications)
 
 for (i in 1:Replications){
