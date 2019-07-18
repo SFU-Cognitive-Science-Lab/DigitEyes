@@ -29,7 +29,7 @@ data$leagueidx=as.factor(data$leagueidx)
 ### Bootstrap Tukey
 
 #should = 167 for the skilldependencemastertable
-nSmallest = sum(data$leagueidx==min(data$leagueidx))
+nSmallest = min(summary(data$leagueidx))
 
 set.seed(1) # to make sampling reproducible
 
@@ -168,7 +168,7 @@ write.table(fixRatePostHoc, file = "AmplitudeTukey", sep = "\t")
 #minimap attack
 # this uses master table again. Therefore hte smallest sample size will be 167.
 
-nSmallest = sum(data$leagueidx==min(data$leagueidx))
+nSmallest = min(summary(data$leagueidx))
 
 mmAttackPostHoc = TukeyFoundationANOVA(data,7, nSmallest)
 write.table(mmAttackPostHoc, file = "mmAttackPostHoc", sep = "\t")
