@@ -24,7 +24,7 @@ ultraTab = read.table('../data/ultraTable.csv', header = T, sep=',')
 ultraTabViable = ultraTab[ultraTab$in_analysis == 1,]
 
 # 2. additional statistics for reported measures in DigitEyes manuscript
-masterTab = read.table('../data/masterTable.csv', header = TRUE, sep = ",")
+masterTab = read.table('../data/masterTable_backup.csv', header = TRUE, sep = ",") # RCAB: Someone changed the name of this file to mastertable_backup. Is there a new file we should be using?
 
 
 leagueObs = aggregate(ultraTabViable$gameid ~ leagueidx, data = ultraTabViable, FUN = function(x) c(nParticipants = length(unique(x))))
@@ -44,18 +44,18 @@ FixSummary = aggregate(FixDuration ~ leagueidx, data = FixTable, FUN = function(
 
 names(PACSummary) <- c("leagueIdx", "PACDuration")
 
-FixPACDuration <- cbind(PACSummary,FixSummary, leagueObs[,2])
+FixPACDuration <- cbind(PACSummary,FixSummary, leagueObs[,2]) # RCAB: May want to just use "FixSummary[,2]" for readability.
 PACSummary = round(PACSummary, digits = 2)
 
 # ============================== PAC Variables, low level details from raw data ============================== # 
 
 # manage data types
-ultraTabViable$ActionLatency = as.numeric(as.character(ultraTabViable$ActionLatency))/88.5347*1000
+ultraTabViable$ActionLatency = as.numeric(as.character(ultraTabViable$ActionLatency))/88.5347*1000 # RCAB: Perhaps comment as to where the 88.5347 comes from
 ultraTabViable$NewViewCost = as.numeric(as.character(ultraTabViable$NewViewCost))/88.5347*1000
 ultraTabViable$BetweenActionLatency = as.numeric(as.character(ultraTabViable$BetweenActionLatency))/88.5347*1000
 
 # PAC variables to summarize from ultra table
-doSummary = c('ActionLatency', 'NewViewCost', "BetweenActionLatency")
+doSummary = c('ActionLatency', 'NewViewCost', "BetweenActionLatency") # RCAB: As th data under these headers is transformed, the names should reflect whether these are the means or the medians, etc.
 
 PACVariables = aggregate(cbind(ultraTabViable$ActionLatency, ultraTabViable$NewViewCost, ultraTabViable$BetweenActionLatency) ~ leagueidx, data = ultraTabViable, FUN = function(x) c(meanVal = mean(x), SD = sd(x), medianVal = median(x), nObs = length(x)) )
 
@@ -63,7 +63,7 @@ PACVariables = aggregate(cbind(ultraTabViable$ActionLatency, ultraTabViable$NewV
 names(PACVariables) <- c("leagueIdx", doSummary)
 
 # sample size
-PACVariable = cbind(PACVariables, leagueObs[,2])
+PACVariable = cbind(PACVariables, leagueObs[,2]) # RCAB: Dont you mean "PACVariables"?
 
 PACVariables = round(PACVariables, digits = 2)
 
@@ -75,13 +75,13 @@ PACVariables = round(PACVariables, digits = 2)
 FixDurData = read.delim("../data/fixMedianNonPAC.txt", sep = ',')
 FixDurData$grandMediansOut = FixDurData$grandMediansOut/88.5347*1000
 FixDurStats = aggregate(FixDurData$grandMediansOut ~ grandLeaguesOut, data = FixDurData, FUN = function(x) c(meanVal = mean(x), SD = sd(x), medianVal = median(x)))
-names(FixDurStats) <- c("leagueIdx", "FixationDuration")
+names(FixDurStats) <- c("leagueIdx", "FixationDuration") # RCAB: In this case, as well as in previous and future cases, descriptive stats are calculated, but not included in the stats table. I think ,for ease of viewing, that these stats should be included in the tables made for stats.
 
 # B. Perception Action Cycle Duration (via fixMedianPAC; one observation per participant)
 PACDurData = read.delim("../data/fixMedianPAC.txt", sep = ",")
 PACDurData$grandMediansOut = PACDurData$grandMediansOut/88.5347*1000
 PACDurStats = aggregate(PACDurData$grandMediansOut ~ grandLeaguesOut, data = PACDurData, FUN = function(x) c(meanVal = mean(x), SD = sd(x), medianVal = median(x)))
-names(PACDurStats) <- c("leagueIdx", "PAC Duration")
+names(PACDurStats) <- c("leagueIdx", "PAC Duration") # RCAB: These headers should reflect the type of data in the table. Means? Medians? etc.
 
 # C. First Action Latency             (via Master table; one observation per participant)
 FALData <- data.frame("leagueIdx" = masterTab$leagueidx, "FAL" = masterTab$pacactionlatencymean)
@@ -95,7 +95,7 @@ names(FALStats)[2] <- ("FAL")
 
 # D. Between Action Latency           (via Ultra table; one observation per participant)
 BALData <- data.frame("leagueIdx" = ultraTabViable$leagueidx, "BAL" = ultraTabViable$BetweenActionLatency)
-BALData = BALData[!is.na(BALData$BAL),]
+BALData = BALData[!is.na(BALData$BAL),] # RCAB: No way this is one observation per person!!! Should this use the MasterTab instead?
 
 BALStats = aggregate(BALData$BAL ~ leagueIdx, data = BALData, FUN = function(x) c(meanVal = mean(x), SD = sd(x), medianVal = median(x)))
 names(BALStats)[2] <- ("BAL")
@@ -105,7 +105,7 @@ NVCData = read.delim("../data/NVC.csv", sep = ',')
 NVCStats = aggregate(NVCData$NVC ~ AllLeagueRec_NVC, data = NVCData, FUN = function(x) c(meanVal = mean(x), SD = sd(x), medianVal = median(x)))
 names(NVCStats) <- c("leagueIdx", "NewViewCost")
 
-# F. Fixation Rate                    (via SC2FixRate.csv)
+# F. Fixation Rate                    (via SC2FixRate.csv) # Are we not doing these here? Can these be deleted?
 # G. Fixation rate                    (via EyeTrackFixRate.csv)
 
 # H. Distance between fixations       (via saccadeAmplitude.csv)
