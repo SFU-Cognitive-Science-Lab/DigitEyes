@@ -8,6 +8,10 @@ Originally Created For: DigitEyes
 Reviewed: [Ximin & Joe] 
 Verified: [Alex & Neda] Nov.17/17 
 
+  [July 19 change, Joe]
+  Modified units of LMER analysis
+  [reeviewed]: 
+  
 INPUT: fixMedianPAC.txt, fixMedianNonPAC.txt                     
 
 OUTPUT: Plots
@@ -197,6 +201,12 @@ ultraTabViable = ultraTab[ultraTab$in_analysis == 1,]
 # specify data class
 ultraTabViable$FixDuration = as.numeric(as.character(ultraTabViable$FixDuration))
 ultraTabViable$leagueidx = as.factor(ultraTabViable$leagueidx)
+
+
+## July 19 change ##
+ultraTabViable$FixDuration=ultraTabViable$FixDuration/88.5347*1000
+## end July 19 change ##
+
 
 if (isPAC == 1){
 analyzeDat = ultraTabViable[ultraTabViable$PACidx == 1, ] 
