@@ -8,6 +8,10 @@ Originally Created For: [StarTrak]
 Reviewed: [Kayla and Nathan] 
 Verified: [Joe] 
 
+  [July 19 change, Joe]
+  Modified units of LMER analysis
+  [reeviewed]: 
+  
 INPUT:                     
 
 OUTPUT: 
@@ -132,6 +136,11 @@ ultraTabViable = ultraTab[ultraTab$in_analysis == 1,]
 # specify data class
 ultraTabViable$NVC = as.numeric(as.character(ultraTabViable$NewViewCost))
 ultraTabViable$leagueidx = as.factor(ultraTabViable$leagueidx)
+
+## July 19 change ##
+ultraTabViable$NVC=ultraTabViable$NVC/88.5347*1000
+## end July 19 change ##
+
 # fit model
 lmeBaseMod=lmer(NVC~(1|gameid),data=ultraTabViable, na.rm = T)
 lmeLeagueMod=lmer(NVC~leagueidx+(1|gameid),data=ultraTabViable, na.rm = T)
