@@ -8,6 +8,11 @@ Originally Created For: StarTrak
 Reviewed: [Kayla & Nathan] 
 Verified: [] 
 
+  [July 19 change, Joe]
+  Modified units of LMER analysis
+  [reeviewed]: 
+  
+
 INPUT: ultraTable.csv                    
 
 OUTPUT: Plots
@@ -115,6 +120,11 @@ require('lme4')
 # specify data class
 CompleteUltraTableNoBALNaN$betweenactionlatency = as.numeric(as.character(CompleteUltraTableNoBALNaN$BetweenActionLatency))
 CompleteUltraTableNoBALNaN$leagueidx = as.factor(CompleteUltraTableNoBALNaN$leagueidx)
+
+## July 19 change ##
+ultraTabViable$betweenactionlatency=ultraTabViable$betweenactionlatency/88.5347*1000
+## end July 19 change ##
+
 # fit model
 lmeBaseMod=lmer(betweenactionlatency~(1|gameid),data=CompleteUltraTableNoBALNaN)
 lmeLeagueMod=lmer(betweenactionlatency~leagueidx+(1|gameid),data=CompleteUltraTableNoBALNaN)
