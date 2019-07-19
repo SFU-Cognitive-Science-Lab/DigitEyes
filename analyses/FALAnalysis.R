@@ -8,6 +8,10 @@
   
   Reviewed: [Ximin & Joe] 
   Verified: [Alex & Neda] Nov.15/17
+
+  [July 19 change, Joe]
+  Modified units of LMER analysis
+  [reeviewed]: 
   
   INPUT:                     
   
@@ -146,6 +150,9 @@ ultraTabViable = ultraTab[ultraTab$in_analysis == 1,]
 ultraTabViable$ActionLatency = as.numeric(as.character(ultraTabViable$ActionLatency))
 ultraTabViable$leagueidx = as.factor(ultraTabViable$leagueidx)
 
+## July 19 change ##
+ultraTabViable$ActionLatency=ultraTabViable$ActionLatency/88.5347*1000
+## end July 19 change ##
 # fit model
 
 lmeBaseMod=lmer(ActionLatency~(1|gameid),data=ultraTabViable)
