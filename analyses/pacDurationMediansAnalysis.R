@@ -35,7 +35,7 @@ if(.Platform$OS.type=="windows") {
   quartz<-function() windows()
 }
 
-isPAC = 0 # if this is 1, it's PAC; if 0 it's fixation
+isPAC = 1 # if this is 1, it's PAC; if 0 it's fixation
 
 # Move to this directory, and use it as a reference point to find the data folder
 this.dir <- dirname(parent.frame(2)$ofile)
@@ -191,6 +191,9 @@ ggsave(saveAsName, width = 7, height = 5, units = c("in"))
 ## LMER
 # reviewed: [Joe]
 # verified: []
+
+#### RCAB: Let's comment these scripts to ensure that someone not involved with the project would be able to follow our code without needing to think too hard.
+
 require('lme4')
 # read data
 unzip('../data/ultraTable.csv.zip', 'ultraTable.csv', exdir = '../data')
@@ -231,6 +234,7 @@ modelDifference = anova(lmeBaseMod, lmeLeagueMod)
 # reviewed: [Joe]
 # verified: [Jordan]
 #    - note: I think proportion of games could be a more useful measure.JB.
+#### RCAB: I agree with Jordan. It should be scaled to account for different sample sizes between leagues. Also, units given in the y-axis are in exponent form. Should be full numbers for readability.
 
 ObsHistDat = aggregate(FixDuration~leagueidx, data = analyzeDat, FUN = length)
 histImg = ggplot(data = ObsHistDat, aes(x=leagueidx, y=FixDuration)) + geom_bar(stat='identity') 
