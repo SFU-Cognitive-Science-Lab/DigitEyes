@@ -40,7 +40,7 @@ ultraTab = ultraTab[ultraTab$in_analysis == 1,]
 
 # prepare critical data
 FAL = (as.numeric(as.character(ultraTab$ActionLatency))/88.5347)*1000 # convert from timestamps to milliseconds
-BAL = (as.numeric(as.character(ultraTab$betweenactionlatency))/88.5347)*1000 # convert from timestamps to milliseconds
+BAL = (as.numeric(as.character(ultraTab$BetweenActionLatency))/88.5347)*1000 # convert from timestamps to milliseconds ####RCAB: You forgot to capitalize BAL here. Fixed.
 AllLeagueRec = ultraTab$leagueidx
 subrec = ultraTab$gameid
 
@@ -130,6 +130,9 @@ visualAndResults <- function(mdnDataFrame, measureName) {
 
 
 # call function for each of the three measures (BAL, FAL, NVC)
-FALOut = visualAndResults(FALmedians, 'FAL')
+FALOut = visualAndResults(FALmedians, 'FAL') 
 BALOut = visualAndResults(BALmedians, 'BAL')
 NVCOut = visualAndResults(NVCmedians, 'NVC')
+#### RCAB: I cant seem to get these graphs working. All I get is the following for each of these three lines:
+# Error in dev(filename = filename, width = dim[1], height = dim[2], ...) : 
+#  unused argument (filename = filename)
