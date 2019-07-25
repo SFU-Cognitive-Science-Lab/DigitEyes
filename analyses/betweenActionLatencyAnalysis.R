@@ -122,7 +122,7 @@ CompleteUltraTableNoBALNaN$betweenactionlatency = as.numeric(as.character(Comple
 CompleteUltraTableNoBALNaN$leagueidx = as.factor(CompleteUltraTableNoBALNaN$leagueidx)
 
 ## July 19 change ##
-ultraTabViable$betweenactionlatency=ultraTabViable$betweenactionlatency/88.5347*1000
+CompleteUltraTableNoBALNaN$betweenactionlatency=ultraTabViable$betweenactionlatency/88.5347*1000
 ## end July 19 change ##
 
 # fit model
