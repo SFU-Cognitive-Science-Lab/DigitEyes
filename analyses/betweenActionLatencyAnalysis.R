@@ -8,9 +8,6 @@ Originally Created For: StarTrak
 Reviewed: [Kayla & Nathan] 
 Verified: [] 
 
-  [July 19 change, Joe]
-  Modified units of LMER analysis
-  [reeviewed]: 
   
 
 INPUT: ultraTable.csv                    
