@@ -121,10 +121,6 @@ require('lme4')
 CompleteUltraTableNoBALNaN$betweenactionlatency = as.numeric(as.character(CompleteUltraTableNoBALNaN$BetweenActionLatency))
 CompleteUltraTableNoBALNaN$leagueidx = as.factor(CompleteUltraTableNoBALNaN$leagueidx)
 
-## July 19 change ##
-CompleteUltraTableNoBALNaN$betweenactionlatency=ultraTabViable$betweenactionlatency/88.5347*1000
-## end July 19 change ##
-
 # fit model
 lmeBaseMod=lmer(betweenactionlatency~(1|gameid),data=CompleteUltraTableNoBALNaN)
 lmeLeagueMod=lmer(betweenactionlatency~leagueidx+(1|gameid),data=CompleteUltraTableNoBALNaN)
