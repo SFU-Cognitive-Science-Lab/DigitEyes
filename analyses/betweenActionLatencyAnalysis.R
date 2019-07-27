@@ -6,7 +6,7 @@ Cognitive Science Lab, Simon Fraser University
 Originally Created For: StarTrak
 
 Reviewed: [Kayla & Nathan] 
-Verified: [] 
+Verified: [Tyrus Tracey] 
 
   
 
@@ -88,7 +88,7 @@ for (leagueNum in 2:7){
 
 ## in response to reviewer request, a histogram of the number of observations that went into analysis.
 # reviewed: [Joe]
-# verified: []
+# verified: [Tyrus]
 ggplot(data = meansByLeague) + geom_histogram(aes(x = meansByLeague$league), stat="count") + labs(title = "Number of Observations in Analysis: BAL") + 
   labs(x="League", y="Count")
 
