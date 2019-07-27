@@ -37,8 +37,6 @@ UltraTable = read.table('../data/ultraTable.csv', header = TRUE, sep = ",")
 UltraTable$leagueidx  = factor(UltraTable$leagueidx)
 UltraTable$BetweenActionLatency = as.numeric(as.character(UltraTable$BetweenActionLatency))/88.5347*1000 # convert to ms 
 
-##LINE 37## CompleteUltraTable would call for in_analysis in UltraTable, which would overwrite the cleaning of NaNs from line 36. -TT
-## CompleteUltraTable is now properly cleaned for unwanted rows. 
 CompleteUltraTable = UltraTable[!is.na(UltraTable$BetweenActionLatency),]
 CompleteUltraTable = CompleteUltraTable[CompleteUltraTable$in_analysis == 1,]
 
@@ -97,14 +95,11 @@ ggplot(data = meansByLeague) + geom_histogram(aes(x = meansByLeague$league), sta
 ggsave('../figures/BALHist.pdf', width = 7, height = 5, units = c("in"))
 
 # number of observations in the raw data 
-##LINE 97## Because CompleteUltraTable now no longer has NaNs there is no need for CompleteUltraTableNoBALNaN
-## CompleteUltraTableNoBALNaN should be replaced by CompleteUltraTable for simplicity and clarity -TT
-CompleteUltraTableNoBALNaN = CompleteUltraTable[!is.na(CompleteUltraTable$BetweenActionLatency),]
 
-ggplot(data = CompleteUltraTableNoBALNaN) + geom_histogram(aes(x = CompleteUltraTableNoBALNaN$leagueidx), stat="count") + labs(title = "Number of Observations in Dataset: BAL") + 
+ggplot(data = CompleteUltraTable) + geom_histogram(aes(x = CompleteUltraTable$leagueidx), stat="count") + labs(title = "Number of Observations in Dataset: BAL") + 
   labs(x="League", y="Count")
 # league seven has 12462 observations 
-# >summary(CompleteUltraTableNoBALNaN)
+# >summary(CompleteUltraTable)
 
 ggsave('../figures/BALRawHist.pdf', width = 7, height = 5, units = c("in"))
 
@@ -115,20 +110,20 @@ require('lme4')
 # read data
 
 # specify data class
-CompleteUltraTableNoBALNaN$betweenactionlatency = as.numeric(as.character(CompleteUltraTableNoBALNaN$BetweenActionLatency))
-CompleteUltraTableNoBALNaN$leagueidx = as.factor(CompleteUltraTableNoBALNaN$leagueidx)
+CompleteUltraTable$BetweenActionLatency = as.numeric(as.character(CompleteUltraTable$BetweenActionLatency))
+CompleteUltraTable$leagueidx = as.factor(CompleteUltraTable$leagueidx)
 
 # fit model
-lmeBaseMod=lmer(betweenactionlatency~(1|gameid),data=CompleteUltraTableNoBALNaN)
-lmeLeagueMod=lmer(betweenactionlatency~leagueidx+(1|gameid),data=CompleteUltraTableNoBALNaN)
+lmeBaseMod=lmer(BetweenActionLatency~(1|gameid),data=CompleteUltraTable)
+lmeLeagueMod=lmer(BetweenActionLatency~leagueidx+(1|gameid),data=CompleteUltraTable)
 
 anova(lmeBaseMod, lmeLeagueMod)
 
 ## Number of observations histograms
 # reviewed: [Joe]
 # verified: [Jordan]
-ObsHistDat = aggregate(betweenactionlatency~leagueidx, data = CompleteUltraTableNoBALNaN, FUN = length)
-histImg = ggplot(data = ObsHistDat, aes(x=leagueidx, y=betweenactionlatency)) + geom_bar(stat='identity') 
+ObsHistDat = aggregate(BetweenActionLatency~leagueidx, data = CompleteUltraTable, FUN = length)
+histImg = ggplot(data = ObsHistDat, aes(x=leagueidx, y=BetweenActionLatency)) + geom_bar(stat='identity') 
 histImg = histImg + labs(title = "Number of Between Action Latency Observations by League", x = "League", y = "Count")
 
 ##LINE133## There's two figures being saved as BALRawHist.pdf (line 107) -TT
@@ -144,23 +139,21 @@ set.seed(1) # to make sampling reproducible
 library(dplyr)
 
 #drop league 7
-ToRemove=which(CompleteUltraTableNoBALNaN$leagueidx=='7')
-CompleteUltraTableNoBALNaN=CompleteUltraTableNoBALNaN[-ToRemove,]
-CompleteUltraTableNoBALNaN$leagueidx=droplevels(CompleteUltraTableNoBALNaN$leagueidx)
+ToRemove=which(CompleteUltraTable$leagueidx=='7')
+CompleteUltraTable=CompleteUltraTable[-ToRemove,]
+CompleteUltraTable$leagueidx=droplevels(CompleteUltraTable$leagueidx)
 
 #set number of samples
 Replications=50
 #initialize
-##LINE 153## I'm getting a warning that the matrix function is missing the first argument.
-## Just double checking whether this is intentional. -TT
 output=matrix(, nrow = 15, ncol = Replications)
 
 for (i in 1:Replications){
   
   #subsample
-  new_data <- CompleteUltraTableNoBALNaN %>% group_by(leagueidx) %>% sample_n(167, replace=FALSE)
+  new_data <- CompleteUltraTable %>% group_by(leagueidx) %>% sample_n(167, replace=FALSE)
   #aov and tukey
-  Anova=aov(new_data$betweenactionlatency ~new_data$leagueidx)
+  Anova=aov(new_data$BetweenActionLatency ~new_data$leagueidx)
   TUKEY=TukeyHSD(Anova)$`new_data$leagueidx`[,4]
   
   #record pvalues
