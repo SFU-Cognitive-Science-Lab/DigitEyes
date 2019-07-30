@@ -1,3 +1,11 @@
+"Description: This script runs analyses on a wide variety of variables that are considered to be supplementary to the primary analyses included in the paper.
+The list of Variables analyzed here is as follows: 
+  PAC Durations, Fixation Durations, 
+  First Action Latency Durations, Between Action Latency Durations, New View Cost Durations, 
+  Fixation Rates Within Starcraft, Fixation rates during eyetracking experiments, 
+  Distances Between Fixations, Ratio of Hotkeys to Regular Select Actions, Offscreen Production, 
+  MiniMap Abilities, MiniMap Right Clicks, and MiniMap Attacks"
+
 " Author: Caitlyn McColeman & Tyrus Tracey
   Date Created: Apr 8 2019 
 Last Edit:
@@ -5,7 +13,7 @@ Last Edit:
 Cognitive Science Lab, Simon Fraser University 
 Originally Created For: DigitEyes Supplementary Material 
 
-Reviewed: 
+Reviewed: [TBD|Robin]
 Verified: 
 
 INPUT: requires ultraTable.csv.zip is in the data directory
@@ -14,7 +22,7 @@ OUTPUT: "
 
 
 
-# read data
+# Load data from file
 
 
 # 1. raw, PAC level table for supplementary
@@ -63,7 +71,7 @@ PACVariables = aggregate(cbind(ultraTabViable$ActionLatency, ultraTabViable$NewV
 names(PACVariables) <- c("leagueIdx", doSummary)
 
 # sample size
-PACVariable = cbind(PACVariables, leagueObs[,2]) # RCAB: Dont you mean "PACVariables"?
+PACVariables = cbind(PACVariables, leagueObs[,2])
 
 PACVariables = round(PACVariables, digits = 2)
 
@@ -71,17 +79,17 @@ PACVariables = round(PACVariables, digits = 2)
 ##                    Section 2: Statistical supplement for all reported data in the DigitEyes manuscript
 ## ============================ # ============================ # ============================ # ============================ ##
 
-# A. Fixation Duration                (via fixMedianNonPAC; one observation per participant)
-FixDurData = read.delim("../data/fixMedianNonPAC.txt", sep = ',')
-FixDurData$grandMediansOut = FixDurData$grandMediansOut/88.5347*1000
-FixDurStats = aggregate(FixDurData$grandMediansOut ~ grandLeaguesOut, data = FixDurData, FUN = function(x) c(meanVal = mean(x), SD = sd(x), medianVal = median(x)))
-names(FixDurStats) <- c("leagueIdx", "FixationDuration") # RCAB: In this case, as well as in previous and future cases, descriptive stats are calculated, but not included in the stats table. I think ,for ease of viewing, that these stats should be included in the tables made for stats.
-
 # B. Perception Action Cycle Duration (via fixMedianPAC; one observation per participant)
 PACDurData = read.delim("../data/fixMedianPAC.txt", sep = ",")
 PACDurData$grandMediansOut = PACDurData$grandMediansOut/88.5347*1000
 PACDurStats = aggregate(PACDurData$grandMediansOut ~ grandLeaguesOut, data = PACDurData, FUN = function(x) c(meanVal = mean(x), SD = sd(x), medianVal = median(x)))
 names(PACDurStats) <- c("leagueIdx", "PAC Duration") # RCAB: These headers should reflect the type of data in the table. Means? Medians? etc.
+
+# A. Fixation Duration                (via fixMedianNonPAC; one observation per participant)
+FixDurData = read.delim("../data/fixMedianNonPAC.txt", sep = ',')
+FixDurData$grandMediansOut = FixDurData$grandMediansOut/88.5347*1000
+FixDurStats = aggregate(FixDurData$grandMediansOut ~ grandLeaguesOut, data = FixDurData, FUN = function(x) c(meanVal = mean(x), SD = sd(x), medianVal = median(x)))
+names(FixDurStats) <- c("leagueIdx", "FixationDuration") # RCAB: In this case, as well as in previous and future cases, descriptive stats are calculated, but not included in the stats table. I think ,for ease of viewing, that these stats should be included in the tables made for stats.
 
 # C. First Action Latency             (via Master table; one observation per participant)
 FALData <- data.frame("leagueIdx" = masterTab$leagueidx, "FAL" = masterTab$pacactionlatencymean)
