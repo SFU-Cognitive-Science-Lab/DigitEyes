@@ -192,8 +192,6 @@ ggsave(saveAsName, width = 7, height = 5, units = c("in"))
 # reviewed: [Joe]
 # verified: []
 
-#### RCAB: Let's comment these scripts to ensure that someone not involved with the project would be able to follow our code without needing to think too hard.
-
 require('lme4')
 # read data
 unzip('../data/ultraTable.csv.zip', 'ultraTable.csv', exdir = '../data')
@@ -227,14 +225,13 @@ histTitle = 'Number of PACs by League'
 lmeBaseMod=lmer(FixDuration~(1|gameid),data=analyzeDat)
 lmeLeagueMod=lmer(FixDuration~leagueidx+(1|gameid),data=analyzeDat)
 confidenceIntervals = confint(lmeLeagueMod, "beta_", level = 0.95)
-modelDifference = anova(lmeBaseMod, lmeLeagueMod)
+modelDifference = anova(lmeBaseMod, lmeLeagueMod) # Needs better commenting to clarify variables, or if someone could guide me through this, I dont quite understand it -Robin
 
 
 ## Number of observations histograms
 # reviewed: [Joe]
 # verified: [Jordan]
 #    - note: I think proportion of games could be a more useful measure.JB.
-#### RCAB: I agree with Jordan. It should be scaled to account for different sample sizes between leagues. Also, units given in the y-axis are in exponent form. Should be full numbers for readability.
 
 ObsHistDat = aggregate(FixDuration~leagueidx, data = analyzeDat, FUN = length)
 histImg = ggplot(data = ObsHistDat, aes(x=leagueidx, y=FixDuration)) + geom_bar(stat='identity') 
