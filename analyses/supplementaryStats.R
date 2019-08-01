@@ -79,17 +79,17 @@ PACVariables = round(PACVariables, digits = 2)
 ##                    Section 2: Statistical supplement for all reported data in the DigitEyes manuscript
 ## ============================ # ============================ # ============================ # ============================ ##
 
-# B. Perception Action Cycle Duration (via fixMedianPAC; one observation per participant)
-PACDurData = read.delim("../data/fixMedianPAC.txt", sep = ",")
-PACDurData$grandMediansOut = PACDurData$grandMediansOut/88.5347*1000
-PACDurStats = aggregate(PACDurData$grandMediansOut ~ grandLeaguesOut, data = PACDurData, FUN = function(x) c(meanVal = mean(x), SD = sd(x), medianVal = median(x)))
-names(PACDurStats) <- c("leagueIdx", "PAC Duration") # RCAB: These headers should reflect the type of data in the table. Means? Medians? etc.
-
 # A. Fixation Duration                (via fixMedianNonPAC; one observation per participant)
 FixDurData = read.delim("../data/fixMedianNonPAC.txt", sep = ',')
 FixDurData$grandMediansOut = FixDurData$grandMediansOut/88.5347*1000
-FixDurStats = aggregate(FixDurData$grandMediansOut ~ grandLeaguesOut, data = FixDurData, FUN = function(x) c(meanVal = mean(x), SD = sd(x), medianVal = median(x)))
-names(FixDurStats) <- c("leagueIdx", "FixationDuration") # RCAB: In this case, as well as in previous and future cases, descriptive stats are calculated, but not included in the stats table. I think ,for ease of viewing, that these stats should be included in the tables made for stats.
+FixDurStats = do.call(data.frame, aggregate(FixDurData$grandMediansOut ~ grandLeaguesOut, data = FixDurData, FUN = function(x) c(meanVal = mean(x), SD = sd(x), medianVal = median(x))))
+colnames(FixDurStats) <- c('League', 'Fixation Duration Mean', 'Fixation Duration SD', 'Fixation Duration Median') 
+
+# B. Perception Action Cycle Duration (via fixMedianPAC; one observation per participant)
+PACDurData = read.delim("../data/fixMedianPAC.txt", sep = ",")
+PACDurData$grandMediansOut = PACDurData$grandMediansOut/88.5347*1000
+PACDurStats = do.call(data.frame, aggregate(PACDurData$grandMediansOut ~ grandLeaguesOut, data = PACDurData, FUN = function(x) c(meanVal = mean(x), SD = sd(x), medianVal = median(x))))
+colnames(PACDurStats) <- c('League', 'PAC Duration Mean', 'PAC Duration SD', 'PAC Duration Median') 
 
 # C. First Action Latency             (via Master table; one observation per participant)
 FALData <- data.frame("leagueIdx" = masterTab$leagueidx, "FAL" = masterTab$pacactionlatencymean)
@@ -98,15 +98,19 @@ FALData$FAL = FALData$FAL/88.5347*1000
 FALData = FALData[complete.cases(FALData$FAL),]
 FALData = FALData[is.finite(FALData$FAL),]
 
-FALStats = aggregate(FALData$FAL ~ leagueIdx, data = FALData, FUN = function(x) c(meanVal = mean(x), SD = sd(x), medianVal = median(x)))
-names(FALStats)[2] <- ("FAL")
+FALStats = do.call(data.frame, aggregate(FALData$FAL ~ leagueIdx, data = FALData, FUN = function(x) c(meanVal = mean(x), SD = sd(x), medianVal = median(x))))
+colnames(FALStats) <- c('League', 'FAL Mean', 'FAL SD', 'FAL Median')
 
 # D. Between Action Latency           (via Ultra table; one observation per participant)
-BALData <- data.frame("leagueIdx" = ultraTabViable$leagueidx, "BAL" = ultraTabViable$BetweenActionLatency)
-BALData = BALData[!is.na(BALData$BAL),] # RCAB: No way this is one observation per person!!! Should this use the MasterTab instead?
+BALData = data.frame(ultraTabViable$gameid, ultraTabViable$leagueidx, ultraTabViable$BetweenActionLatency)
+colnames(BALData) = c('gameid', 'leagueidx', 'BAL')
+BALData = BALData[!is.na(BALData$BAL),]
+BALData = BALData[order(BALData$leagueidx),]
+BALData = aggregate(as.numeric(as.character(BALData$BAL)), by = list(BALData$gameid, BALData$leagueidx), FUN = mean)
+colnames(BALData) = c('gameid', 'leagueidx', 'BAL')
 
-BALStats = aggregate(BALData$BAL ~ leagueIdx, data = BALData, FUN = function(x) c(meanVal = mean(x), SD = sd(x), medianVal = median(x)))
-names(BALStats)[2] <- ("BAL")
+BALStats = do.call(data.frame, aggregate(BALData$BAL, list(BALData$leagueidx), FUN = function(x) c(meanVal = mean(x), SD = sd(x), medianVal = median(x))))
+colnames(BALStats) = c('League', 'BAL Mean', 'BAL SD', 'BAL Median')
 
 # E. New View Cost                    (via NVC.csv)
 NVCData = read.delim("../data/NVC.csv", sep = ',')
@@ -120,25 +124,21 @@ names(NVCStats) <- c("leagueIdx", "NewViewCost")
 amplitudeData = read.delim("../data/saccadeAmplitude.csv", sep = ',')
 amplitudeData = amplitudeData[is.finite(amplitudeData$Scouts),]
 
-amplitudeStats = aggregate(amplitudeData$Scouts ~ AllLeagueRec_Scouts, data = amplitudeData, FUN = function(x) c(meanVal = mean(x), SD = sd(x), medianVal = median(x)))
-
-names(amplitudeStats) <- c("League", "Amplitude")
+amplitudeStats = do.call(data.frame, aggregate(amplitudeData$Scouts ~ AllLeagueRec_Scouts, data = amplitudeData, FUN = function(x) c(meanVal = mean(x), SD = sd(x), medianVal = median(x))))
+colnames(amplitudeStats) <- c('League', 'Amplitude Mean', 'Amplitude SD', 'Amplitude Median')
 
 # I. HK:Select                        (via hkVSSel.csv)
 HKtoSelData = read.delim("../data/hkVSSel.csv", sep = ',')
 HKtoSelData = HKtoSelData[is.finite(HKtoSelData$ratioRec),]
 
-HKtoSelStats = aggregate(ratioRec ~ LeagueIdx.x, data = HKtoSelData, FUN = function(x) c(meanVal = mean(x), SD = sd(x), medianVal = median(x)))
-
-names(HKtoSelStats) <- c("League", "HotkeyToSelectRatio")
+HKtoSelStats = do.call(data.frame, aggregate(ratioRec ~ LeagueIdx.x, data = HKtoSelData, FUN = function(x) c(meanVal = mean(x), SD = sd(x), medianVal = median(x))))
+colnames(HKtoSelStats) <- c('League', 'Hotkey Select Mean', 'Hotkey Select SD', 'Hotkey Select Median')
 
 # J. OffScreen Production             (via playerOnOffProduction.csv)
 OffScreenProdData = read.delim("../data/playerOnOffProduction.csv", sep = ',')
 
-OffScreenPercentStats = aggregate(OffScreenPercent ~ LeagueNum, data = OffScreenProdData, FUN = function(x) c(meanVal = mean(x), SD = sd(x), medianVal = median(x)))
-
-names(OffScreenPercentStats) <- c("League", "OffScreenPercent")
-
+OffScreenPercentStats = do.call(data.frame, aggregate(OffScreenPercent ~ LeagueNum, data = OffScreenProdData, FUN = function(x) c(meanVal = mean(x), SD = sd(x), medianVal = median(x))))
+colnames(OffScreenPercentStats) <- c('League', 'Offscreen Mean', 'Offscreen SD', 'Offscreen Median')
 
 # L. Mini-Map Ability                 (via Master table; one observation per participant)
 MapAblStats = aggregate(masterTab$MapAblPerMin ~ leagueidx, data = masterTab, FUN = function(x) c(meanVal = mean(x), SD = sd(x), medianVal = median(x)))
