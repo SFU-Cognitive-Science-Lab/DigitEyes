@@ -88,7 +88,7 @@ visualAndResults <- function(mdnDataFrame, measureName) {
   
   
   # save image
-  ggsave(paste('../figures/', measureName, '.pdf', sep = ""), device = pdf, width = 7, height = 5, units = c("in"))
+  ggsave(paste('../figures/', measureName, '.pdf', sep = ""), device = "pdf", width = 7, height = 5, units = c("in"))
   
   print(Img)
   
@@ -136,3 +136,4 @@ NVCOut = visualAndResults(NVCmedians, 'NVC')
 #### RCAB: I cant seem to get these graphs working. All I get is the following for each of these three lines:
 # Error in dev(filename = filename, width = dim[1], height = dim[2], ...) : 
 #  unused argument (filename = filename)
+#### NOTE 8-8-2019 RCAB fixed by adding changing device = pdf to  device = "pdf" in ggsave on line 91
