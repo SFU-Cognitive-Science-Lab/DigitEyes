@@ -1,12 +1,12 @@
-
-" Author: Caitlyn McColeman
+"
+Author: Caitlyn McColeman
 Date Created: July 31 2018 
 Last Edit:
 
 Cognitive Science Lab, Simon Fraser University 
 Originally Created For: DigitEyes' supplementary material
 
-Reviewed: 
+Reviewed: [In Progress: ROBIN]
 Verified: 
 
 INPUT:                     
