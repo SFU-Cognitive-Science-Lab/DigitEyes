@@ -56,15 +56,15 @@ for (i in 1:Replications){
   #record pvalues
   output[1:length(TUKEY),i]=TUKEY
   
-  #### Debug Code: Comment out all of this to run this script for real ####
-  #unequalvariancetest=bartlett.test(new_data[,colNum]~new_data$leagueidx)
-  #boxplot(new_data[,colNum]~new_data$leagueidx, main=unequalvariancetest)
-  #readline(prompt="Joe's Dirty Debugger Activated [enter] to continue [esc] to abord")
+  ### Debug Code: Comment out all of this to run this script for real ####
+  unequalvariancetest=bartlett.test(new_data[,colNum]~new_data$leagueidx)
+  boxplot(new_data[,colNum]~new_data$leagueidx, main=unequalvariancetest)
+  readline(prompt="Joe's Dirty Debugger Activated [enter] to continue [esc] to abord")
 
-  #### Debug Code part 2: Use this to run TukeyFoundationANOVA outside of a function for PACDur ####
-  #new_data=data
-  #colNum=1
-  #nSmallestGroup=100
+  ### Debug Code part 2: Use this to run TukeyFoundationANOVA outside of a function for PACDur ####
+  new_data=data
+  colNum=1
+  nSmallestGroup=100
 
 }
 
