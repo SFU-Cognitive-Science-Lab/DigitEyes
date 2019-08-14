@@ -33,7 +33,7 @@ setwd('../data/') # move up and into data folder
 
 #################### StarCraft2 data ####################
 
-SCFixRate = read.table('SC2FixRate.csv', header = TRUE, sep = ",")
+SCFixRate = read.table('SC2FixRate.csv', header = FALSE, sep = ",")
 names(SCFixRate) = c("leagueID", "fixRate")
 
 # Specify that the League Column is a Factor
