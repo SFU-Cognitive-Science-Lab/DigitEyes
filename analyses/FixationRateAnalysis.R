@@ -123,39 +123,3 @@ ggplot(data = SCFixRate) + geom_histogram(aes(x = SCFixRate$leagueID), stat="cou
   labs(x="League", y="Count")
 
 ggsave('../figures/SCFixRateHist.pdf', width = 7, height = 5, units = c("in"))
-
-### Bootstrap Tukey
-
-# reviewed by Caitlyn [Jun 19 2019]
-
-set.seed(1) # to make sampling reproducible
-
-library(dplyr)
-
-#drop league 7
-ToRemove=which(SCFixRate$leagueID=='7')
-ultraTabViable=SCFixRate[-ToRemove,]
-ultraTabViable$leagueID=droplevels(ultraTabViable$leagueID)
-
-#set number of samples
-Replications=50
-#initialize
-output=matrix(, nrow = 15, ncol = Replications)
-
-for (i in 1:Replications){
-  
-  #subsample
-  new_data <- ultraTabViable %>% group_by(leagueID) %>% sample_n(167, replace=FALSE)
-  #aov and tukey
-  Anova=aov(new_data$fixRate~new_data$leagueID)
-  TUKEY=TukeyHSD(Anova)$`new_data$leagueID`[,4]
-  
-  #record pvalues
-  output[1:length(TUKEY),i]=TUKEY
-}
-
-#mean pvalues, and produce output
-RowMEANZ=rowMeans(output)
-FinalOutput=data.frame(as.factor(row.names(TukeyHSD(Anova)$`new_data$leagueID`)),RowMEANZ)
-names(FinalOutput)=c('Comparison','Mean PValue')
-FinalOutput
