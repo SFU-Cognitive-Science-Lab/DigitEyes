@@ -34,7 +34,7 @@ setwd(this.dir)
 
 setwd('../data/') # move up and into data folder
 
-MasterTable = read.table('masterTable.csv', header = TRUE, sep = ",")
+MasterTable = read.table('masterTable_backup.csv', header = TRUE, sep = ",")
 
 # hotkey vs. select
 
@@ -67,7 +67,7 @@ ggplot_build(mapRCImg)
 ggsave('../figures/mapRC.pdf', width = 7, height = 5, units = c("in"))
 
 ## in response to reviewer request, a histogram of the number of observations that went into analysis.
-# reviewed: []
+# reviewed: [Robin]
 # verified: []
 ggplot(data = CompleteMasterTable[!(CompleteMasterTable$LeagueIdx == 0),]) + geom_histogram(aes(x = CompleteMasterTable$LeagueIdx), stat="count") + labs(title = "Number of Observations in Analysis: Map Right Clicks Per Minute") + 
   labs(x="League", y="Count")
@@ -90,7 +90,7 @@ ggplot_build(mapAtkImg)
 ggsave('../figures/mapAtk.pdf', width = 7, height = 5, units = c("in"))
 
 ## in response to reviewer request, a histogram of the number of observations that went into analysis.
-# reviewed: []
+# reviewed: [Robin]
 # verified: []
 ggplot(data = CompleteMasterTable[!(CompleteMasterTable$LeagueIdx == 0),]) + geom_histogram(aes(x = CompleteMasterTable$LeagueIdx), stat="count") + labs(title = "Number of Observations in Analysis: Map Attacks Per Minute") + 
   labs(x="League", y="Count")
@@ -113,7 +113,7 @@ ggplot_build(mapAbilImg)
 ggsave('../figures/mapAbility.pdf', width = 7, height = 5, units = c("in"))
 
 ## in response to reviewer request, a histogram of the number of observations that went into analysis.
-# reviewed: []
+# reviewed: [Robin]
 # verified: []
 ggplot(data = CompleteMasterTable[!(CompleteMasterTable$LeagueIdx == 0),]) + geom_histogram(aes(x = CompleteMasterTable$LeagueIdx), stat="count") + labs(title = "Number of Observations in Analysis: Map Abilities Per Minute") + 
   labs(x="League", y="Count")
@@ -132,9 +132,9 @@ HKVsSel$ratioRec = HKVsSel$HKselCount / HKVsSel$selCount
 
 quartz()
 
-HKVsSel$LeagueIdx <- as.factor(HKVsSel$LeagueIdx)
+HKVsSel$LeagueIdx.x <- as.factor(HKVsSel$LeagueIdx.x)
 
-hkRatioImg = ggplot(HKVsSel[!(HKVsSel$LeagueIdx == 0),], aes(factor(LeagueIdx),ratioRec))
+hkRatioImg = ggplot(HKVsSel[!(HKVsSel$LeagueIdx.x == 0),], aes(factor(LeagueIdx.x),ratioRec))
 hkRatioImg = hkRatioImg + geom_jitter(height = 0, width = 0.2, alpha = .1)
 hkRatioImg = hkRatioImg + theme_bw() + theme_bw() + theme(text = element_text(size=25), panel.grid.major = element_blank(), plot.title = element_text(size=25)) 
 hkRatioImg = hkRatioImg + geom_violin(alpha = .2, fill = "#C0C0C0", colour = "#C0C0C0")
@@ -146,9 +146,9 @@ ggplot_build(hkRatioImg)
 ggsave('../figures/hkToSelect.pdf', width = 7, height = 5.5, units = c("in")) # making this a little taller for the title to fit
 
 ## in response to reviewer request, a histogram of the number of observations that went into analysis.
-# reviewed: []
+# reviewed: [Robin]
 # verified: []
-ggplot(data = HKVsSel) + geom_histogram(aes(x = HKVsSel$leagueIdx), stat="count") + labs(title = "Number of Observations in Analysis: HotKey:Select Ratio") + 
+ggplot(data = HKVsSel) + geom_histogram(aes(x = HKVsSel$leagueIdx.x), stat="Count") + labs(title = "Number of Observations in Analysis: HotKey:Select Ratio") + 
   labs(x="League", y="Count")
 
 ggsave('../figures/HKSelHist.pdf', width = 7, height = 5, units = c("in"))
@@ -159,7 +159,7 @@ write.csv(HKVsSel, file = "../data/hkVSSel.csv")
 MapRCResult=kruskal.test(CompleteMasterTable$MapRCPerMin~CompleteMasterTable$LeagueIdx)
 MapAtkResult=kruskal.test(CompleteMasterTable$MapAtkPerMin~CompleteMasterTable$LeagueIdx)
 MapAblResult=kruskal.test(CompleteMasterTable$MapAblPerMin~CompleteMasterTable$LeagueIdx)
-HKVsSelResult=kruskal.test(HKVsSel$ratioRec~HKVsSel$LeagueIdx)
+HKVsSelResult=kruskal.test(HKVsSel$ratioRec~HKVsSel$LeagueIdx.x)
 
 # get effect size, as per TOMCZAK & TOMCZAK (2014). Reference: http://www.tss.awf.poznan.pl/files/3_Trends_Vol21_2014__no1_20.pdf
 
@@ -192,7 +192,7 @@ silverAndMasterAtk = wilcox.test(CompleteMasterTable$MapAtkPerMin[CompleteMaster
 
 silverAndMasterAbl = wilcox.test(CompleteMasterTable$MapAblPerMin[CompleteMasterTable$LeagueIdx == 2],CompleteMasterTable$MapAblPerMin[CompleteMasterTable$LeagueIdx == 6])
 
-silverAndMasterHKvS = wilcox.test(HKVsSel$ratioRec[HKVsSel$leagueRec == 2],HKVsSel$ratioRec[HKVsSel$leagueRec == 6])
+silverAndMasterHKvS = wilcox.test(HKVsSel$ratioRec[HKVsSel$LeagueIdx.x == 2], HKVsSel$ratioRec[HKVsSel$LeagueIdx.x == 6])
 
 # 3. Look at bronze vs. subsequent leagues; helpful for more typical learning curve distributions as well.
 
@@ -222,4 +222,4 @@ effectByLeagueAtk = effectSizeTTest(CompleteMasterTable$MapAtkPerMin,CompleteMas
 
 effectByLeagueAbl = effectSizeTTest(CompleteMasterTable$MapAblPerMin,CompleteMasterTable$LeagueIdx)
 
-effectByLeagueHKvS = effectSizeTTest(HKVsSel$ratioRec,HKVsSel$LeagueIdx)
+effectByLeagueHKvS = effectSizeTTest(HKVsSel$ratioRec,HKVsSel$LeagueIdx.x)
