@@ -111,6 +111,6 @@ for (leagueNum in 2:7){
 #### RCAB: Ran this on my computer to review it. Runs fine, but the y-axis start below zero for some odd reason. If this can be fixed, I'd call this reviewed.
 #### RCAB: Also note Jordan's observation that these values should perhaps be scaled by league to account for different group sizes
 ggplot(data = noNaNScouts) + geom_histogram(aes(x = noNaNScouts$AllLeagueRec_Scouts), stat="count") + labs(title = "Number of Observations in Analysis: Saccade amplitude") + 
-  labs(x="League", y="Count")
+  labs(x="League", y="Count") + ylim(0, 850)
 
 ggsave('../figures/saccadeAmplitudeHist.pdf', width = 7, height = 5, units = c("in"))
