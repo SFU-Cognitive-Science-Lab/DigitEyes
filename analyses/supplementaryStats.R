@@ -13,7 +13,7 @@ Last Edit:
 Cognitive Science Lab, Simon Fraser University 
 Originally Created For: DigitEyes Supplementary Material 
 
-Reviewed: [TBD|Robin]
+Reviewed: [Robin]
 Verified: 
 
 INPUT: requires ultraTable.csv.zip is in the data directory
@@ -117,38 +117,35 @@ NVCData = read.delim("../data/NVC.csv", sep = ',')
 NVCStats = aggregate(NVCData$NVC ~ AllLeagueRec_NVC, data = NVCData, FUN = function(x) c(meanVal = mean(x), SD = sd(x), medianVal = median(x)))
 names(NVCStats) <- c("leagueIdx", "NewViewCost")
 
-# F. Fixation Rate                    (via SC2FixRate.csv) # Are we not doing these here? Can these be deleted?
-# G. Fixation rate                    (via EyeTrackFixRate.csv)
-
-# H. Distance between fixations       (via saccadeAmplitude.csv)
+# F. Distance between fixations       (via saccadeAmplitude.csv)
 amplitudeData = read.delim("../data/saccadeAmplitude.csv", sep = ',')
 amplitudeData = amplitudeData[is.finite(amplitudeData$Scouts),]
 
 amplitudeStats = do.call(data.frame, aggregate(amplitudeData$Scouts ~ AllLeagueRec_Scouts, data = amplitudeData, FUN = function(x) c(meanVal = mean(x), SD = sd(x), medianVal = median(x))))
 colnames(amplitudeStats) <- c('League', 'Amplitude Mean', 'Amplitude SD', 'Amplitude Median')
 
-# I. HK:Select                        (via hkVSSel.csv)
+# G. HK:Select                        (via hkVSSel.csv)
 HKtoSelData = read.delim("../data/hkVSSel.csv", sep = ',')
 HKtoSelData = HKtoSelData[is.finite(HKtoSelData$ratioRec),]
 
 HKtoSelStats = do.call(data.frame, aggregate(ratioRec ~ LeagueIdx.x, data = HKtoSelData, FUN = function(x) c(meanVal = mean(x), SD = sd(x), medianVal = median(x))))
 colnames(HKtoSelStats) <- c('League', 'Hotkey Select Mean', 'Hotkey Select SD', 'Hotkey Select Median')
 
-# J. OffScreen Production             (via playerOnOffProduction.csv)
+# H. OffScreen Production             (via playerOnOffProduction.csv)
 OffScreenProdData = read.delim("../data/playerOnOffProduction.csv", sep = ',')
 
 OffScreenPercentStats = do.call(data.frame, aggregate(OffScreenPercent ~ LeagueNum, data = OffScreenProdData, FUN = function(x) c(meanVal = mean(x), SD = sd(x), medianVal = median(x))))
 colnames(OffScreenPercentStats) <- c('League', 'Offscreen Mean', 'Offscreen SD', 'Offscreen Median')
 
-# L. Mini-Map Ability                 (via Master table; one observation per participant)
+# I. Mini-Map Ability                 (via Master table; one observation per participant)
 MapAblStats = aggregate(masterTab$MapAblPerMin ~ leagueidx, data = masterTab, FUN = function(x) c(meanVal = mean(x), SD = sd(x), medianVal = median(x)))
 names(MapAblStats)[2] <- ("MapAblPerMin")
 
-# M. Mini-Map Attacks                 (via Master table; one observation per participant)
+# J. Mini-Map Attacks                 (via Master table; one observation per participant)
 MapAtkStats = aggregate(masterTab$MapAtkPerMin ~ leagueidx, data = masterTab, FUN = function(x) c(meanVal = mean(x), SD = sd(x), medianVal = median(x)))
 names(MapAtkStats)[2] <- ("MapAtkPerMin")
 
-# N. Mini-Map Right Clicks            (via Master table; one observation per participant)
+# K. Mini-Map Right Clicks            (via Master table; one observation per participant)
 MapRCStats = aggregate(masterTab$MapRCPerMin ~ leagueidx, data = masterTab, FUN = function(x) c(meanVal = mean(x), SD = sd(x), medianVal = median(x)))
 names(MapRCStats)[2] <- ("MapRCPerMin")
 

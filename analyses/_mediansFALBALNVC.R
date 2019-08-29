@@ -6,7 +6,7 @@ Last Edit:
 Cognitive Science Lab, Simon Fraser University 
 Originally Created For: DigitEyes' supplementary material
 
-Reviewed: [In Progress: ROBIN]
+Reviewed: [ROBIN]
 Verified: 
 
 INPUT:                     
@@ -133,7 +133,3 @@ visualAndResults <- function(mdnDataFrame, measureName) {
 FALOut = visualAndResults(FALmedians, 'FAL') 
 BALOut = visualAndResults(BALmedians, 'BAL')
 NVCOut = visualAndResults(NVCmedians, 'NVC')
-#### RCAB: I cant seem to get these graphs working. All I get is the following for each of these three lines:
-# Error in dev(filename = filename, width = dim[1], height = dim[2], ...) : 
-#  unused argument (filename = filename)
-#### NOTE 8-8-2019 RCAB fixed by adding changing device = pdf to  device = "pdf" in ggsave on line 91

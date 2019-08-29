@@ -15,7 +15,7 @@
 #
 #   Review action items: Joe
 #
-# Verified: TBD (Robin) 
+# Verified: Robin 
 
 
 # FIRST: ensure directory is the same structure as https://github.com/SFU-Cognitive-Science-Lab/DigitEyes, with a subfolder for each of data, analyses and figures
@@ -55,11 +55,11 @@ for (i in 1:Replications){
   
   #record pvalues
   output[1:length(TUKEY),i]=TUKEY
-  
+
   ### Debug Code: Comment out all of this to run this script for real ####
   unequalvariancetest=bartlett.test(new_data[,colNum]~new_data$leagueidx)
   boxplot(new_data[,colNum]~new_data$leagueidx, main=unequalvariancetest)
-  readline(prompt="Joe's Dirty Debugger Activated [enter] to continue [esc] to abord")
+  readline(prompt="Joe's Dirty Debugger Activated [enter] to continue [esc] to abort")
 
   ### Debug Code part 2: Use this to run TukeyFoundationANOVA outside of a function for PACDur ####
   new_data=data
@@ -109,7 +109,7 @@ HKVsSel$leagueidx <- droplevels(HKVsSel$leagueidx)
 grpSize = aggregate(ratioRec ~ leagueidx, data = HKVsSel, FUN = length)
 nSmallest = min(grpSize$ratioRec)
 
-#HKVsSelect ratio #####RCAB: Starting here, every first iteration of the Tukey script produces, on its first iteration, a distribution of scores that is in no way representative of the data.
+#HKVsSelect ratio
 HKVsSelPostHoc = TukeyFoundationANOVA(HKVsSel,9,nSmallest) # 9th column should be ratioRec; please check before reporting each time.
 write.table(HKVsSelPostHoc, file = "HKSelTukey", sep = "\t")
 
@@ -139,7 +139,7 @@ grpSize = aggregate(Scouts ~ leagueidx, data = SaccadeAmplitude, FUN = length) #
 nSmallest = min(grpSize$Scouts)
 
 amplitudePostHoc = TukeyFoundationANOVA(SaccadeAmplitude,2, nSmallest) # 2nd column should be Scouts; please check before reporting each time.
-#### RCAB: Ran Joe's debugger on this, and it only seems to operate properly on first iteration.
+
 write.table(amplitudePostHoc, file = "AmplitudeTukey", sep = "\t")
 
 #4) between fixation amplitude
@@ -162,7 +162,7 @@ grpSize = aggregate(fixRate ~ leagueidx, data = SCFixRate, FUN = length) # check
 nSmallest = min(grpSize$fixRate)
 
 fixRatePostHoc = TukeyFoundationANOVA(SCFixRate,3,nSmallest)
-#### RCAB: First iteration doesnt look anything like following iterations for this measure. variability does not seem representative of dataset
+
 write.table(fixRatePostHoc, file = "AmplitudeTukey", sep = "\t")
 
 ## mini-map measures
