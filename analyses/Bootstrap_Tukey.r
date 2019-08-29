@@ -62,9 +62,9 @@ for (i in 1:Replications){
   readline(prompt="Joe's Dirty Debugger Activated [enter] to continue [esc] to abort")
 
   ### Debug Code part 2: Use this to run TukeyFoundationANOVA outside of a function for PACDur ####
-  new_data=data
-  colNum=1
-  nSmallestGroup=100
+  #new_data=data
+  #colNum=1
+  #nSmallestGroup=100
 
 }
 
