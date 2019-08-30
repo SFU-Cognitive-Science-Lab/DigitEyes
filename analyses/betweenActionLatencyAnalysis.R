@@ -126,7 +126,6 @@ ObsHistDat = aggregate(BetweenActionLatency~leagueidx, data = CompleteUltraTable
 histImg = ggplot(data = ObsHistDat, aes(x=leagueidx, y=BetweenActionLatency)) + geom_bar(stat='identity') 
 histImg = histImg + labs(title = "Number of Between Action Latency Observations by League", x = "League", y = "Count")
 
-##LINE131## There's two figures being saved as BALRawHist.pdf (line 104) -TT
 ## They'll show up individually in RStudio but the first one gets overwritten when you look from the figures folder
 ggsave('../figures/BALRawHist.pdf', width = 7, height = 5, units = c("in"))
 
